@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryManagement.Model 
+namespace LibraryManagement.model
 {
     public class Loan
     {
@@ -21,6 +21,5 @@ namespace LibraryManagement.Model
             LoanDate = loanDate;
             ReturnDate = returnDate;
         }
-    } 
-
+    }
 }
