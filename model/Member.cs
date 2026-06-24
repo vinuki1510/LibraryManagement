@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryManagement.Model
+namespace LibraryManagement.model
 {
     public class Member
     {
@@ -17,6 +17,4 @@ namespace LibraryManagement.Model
             MemberName = memberName;
         }
     }
-
 }
-
