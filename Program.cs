@@ -115,7 +115,28 @@ namespace LibraryManagement
                 }
             }
         }
-        
+        private static void AdminMenu()
+        {
+            bool logout = false;
+            while (!logout)
+            {
+                int option = myView.AdminMenu();
+                switch (option)
+                {
+                    case 1:
+                        myView.DisplayMessage("Add staff");
+                        break;
+                    case 2:
+                        myView.DisplayMessage("View staff");
+                        break;
+                    case 3:
+                        logout = true;
+                        myView.DisplayMessage("Logging out...");
+                        break;
+                }
+            }
+        }
+
     }
      
 }

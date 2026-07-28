@@ -42,6 +42,16 @@ namespace LibraryManagement.View
             Console.Write("Please enter your choice: ");
             return int.Parse(Console.ReadLine());
         }           
+
+        public int AdminMenu()
+        {
+            Console.WriteLine("\nAdmin Menu:");
+            Console.WriteLine("1. Add staff");
+            Console.WriteLine("2. View staff");
+            Console.WriteLine("3. Logout");
+            Console.Write("Please enter your choice: ");
+            return int.Parse(Console.ReadLine());       
+        }
         public void DisplayMessage (string message)
         {
             Console.WriteLine(message);
