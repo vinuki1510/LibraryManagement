@@ -1,4 +1,5 @@
 ﻿using LibraryManagement.controller;
+using LibraryManagement.SqlClient;
 using LibraryManagement.View;
 
 namespace LibraryManagement
@@ -40,7 +41,46 @@ namespace LibraryManagement
 
         }
 
+        private static void Login()
+        {
+            myView.DisplayMessage("Enter username: ");
+            string username = myView.GetInput();
+            myView.DisplayMessage("Enter password: ");
+            string password = myView.GetInput();
+            string role = storageManager.Login(username, password);
+           
+            if (role == "Member") 
+            {
+                MemberMenu();
+            }
+            else
+            {
+                myView.DisplayMessage("Invalid username or password. Please try again.");
+            }
+        }
+        private static void MemberMenu()
+        {
+            bool logout = false;
+            while (!logout)
+            {
+                int option = myView.MemberMenu();
+                switch (option)
+                {
+                    case 1:
+                        myView.DisplayMessage("View books");
+                        break;
+                    case 2:
+                        myView.DisplayMessage("Borrow book");
+                        break;
+                    case 3:
+                        logout = true;
+                        myView.DisplayMessage("Logging out...");
+                        break; 
+                    
+                }
+            }
+        }
+        
     }
-
-
+     
 }

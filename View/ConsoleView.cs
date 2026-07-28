@@ -20,6 +20,15 @@ namespace LibraryManagement.View
             Console.Write("Please enter your choice: "); 
         }
 
+        public int MemberMenu()
+        {
+            Console.WriteLine("\nMember Menu:");
+            Console.WriteLine("1. View Books");
+            Console.WriteLine("2. Borrow Book");
+            Console.WriteLine("4. Logout");
+            Console.Write("Please enter your choice: ");
+            return int.Parse(Console.ReadLine());
+        }
         public void DisplayMessage (string message)
         {
             Console.WriteLine(message);
