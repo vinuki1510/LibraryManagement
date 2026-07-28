@@ -16,9 +16,9 @@ namespace LibraryManagement
             myView = new ConsoleView();
             bool exit = false;
             while (!exit)
-            {
+            { 
                 myView.DisplayMainMenu();
-                string choice = myView.GetUserInput();
+                string choice = myView.GetInput();
 
                 switch (choice)
                 {

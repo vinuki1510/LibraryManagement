@@ -1,0 +1,6 @@
+C:\Users\Admin\source\repos\vinuki1510\LibraryManagement\obj\Debug\net9.0\LibraryManagement.csproj.AssemblyReference.cache
+C:\Users\Admin\source\repos\vinuki1510\LibraryManagement\obj\Debug\net9.0\LibraryManagement.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\source\repos\vinuki1510\LibraryManagement\obj\Debug\net9.0\LibraryManagement.AssemblyInfoInputs.cache
+C:\Users\Admin\source\repos\vinuki1510\LibraryManagement\obj\Debug\net9.0\LibraryManagement.AssemblyInfo.cs
+C:\Users\Admin\source\repos\vinuki1510\LibraryManagement\obj\Debug\net9.0\LibraryManagement.csproj.CoreCompileInputs.cache
+C:\Users\Admin\source\repos\vinuki1510\LibraryManagement\obj\Debug\net9.0\LibraryManagement.sourcelink.json

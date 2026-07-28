@@ -13,7 +13,7 @@ namespace LibraryManagement.model
         public Member() { }
         public Member(int memberID, string memberName)
         {
-            MemberID = memberID;
+            MemberID = memberID; 
             MemberName = memberName;
         } 
     }

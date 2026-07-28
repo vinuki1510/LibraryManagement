@@ -10,12 +10,14 @@ namespace LibraryManagement.View
     {
         public void DisplayMainMenu()
         {
+            Console.WriteLine("========================================");
             Console.WriteLine("Welcome to the Library Management System");
-            Console.WriteLine("1. Manage Members");
-            Console.WriteLine("2. Manage Books");
-            Console.WriteLine("3. Manage Loans");
-            Console.WriteLine("4. Exit");
-            Console.Write("Please enter your choice: ");
+            Console.WriteLine("========================================");
+
+            Console.WriteLine("\nMain Menu:"); 
+            Console.WriteLine("1. Login"); 
+            Console.WriteLine("2. Exit");
+            Console.Write("Please enter your choice: "); 
         }
 
         public void DisplayMessage (string message)
