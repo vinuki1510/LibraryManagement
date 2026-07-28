@@ -48,10 +48,14 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter password: ");
             string password = myView.GetInput();
             string role = storageManager.Login(username, password);
-           
-            if (role == "Member") 
+
+            if (role == "Member")
             {
                 MemberMenu();
+            }
+            else if (role == "Staff")
+            {
+                StaffMenu();
             }
             else
             {
@@ -67,16 +71,47 @@ namespace LibraryManagement
                 switch (option)
                 {
                     case 1:
-                        myView.DisplayMessage("View books");
+                        myView.DisplayMessage("Search books");
                         break;
                     case 2:
                         myView.DisplayMessage("Borrow book");
                         break;
                     case 3:
+                        myView.DisplayMessage("View my loans");
+                        break;
+                    case 4:
                         logout = true;
                         myView.DisplayMessage("Logging out...");
                         break; 
                     
+                }
+            }
+        }
+        private static void StaffMenu()
+        {
+            bool logout = false;
+            while (!logout)
+            {
+                int option = myView.StaffMenu();
+                switch (option)
+                {
+                    case 1:
+                        myView.DisplayMessage("Add books");
+                        break;
+                    case 2:
+                        myView.DisplayMessage("Register member");
+                        break;
+                    case 3:
+                        myView.DisplayMessage("Update books");
+                        break;
+                    case 4:
+                        myView.DisplayMessage("Process returns");
+                        break;
+                    case 5:
+                        logout = true;
+                        myView.DisplayMessage("Logging out...");
+                        break;
+
                 }
             }
         }
