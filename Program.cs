@@ -11,6 +11,8 @@ namespace LibraryManagement
             string connectionString = "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=BikeStores;Integrated Security=True;Encrypt=False;TrustServerCertificate=True;";
 
             storageManager = new StorageManager(connectionString);
+            myView = new ConsoleView();
+
         }
 
 

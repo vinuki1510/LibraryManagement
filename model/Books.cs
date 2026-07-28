@@ -16,7 +16,7 @@ namespace LibraryManagement.model
         public Books(int booksID, string booksName, int authorID, int categoryID)
         {
             BooksID = booksID;
-            BooksName = booksName;
+            BooksName = booksName; 
             AuthorID = authorID;
             CategoryID = categoryID;
         }

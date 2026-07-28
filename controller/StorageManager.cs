@@ -1,6 +1,5 @@
-﻿using LibraryManagement.model;
+﻿using Microsoft.Data.SqlClient;
 using System;
-using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,73 +9,35 @@ namespace LibraryManagement.controller
 {
     public class StorageManager
     {
-
         private SqlConnection conn;
-
-
         public StorageManager(string connectionString)
-
         {
-
             try
             {
-
                 conn = new SqlConnection(connectionString);
-
                 conn.Open();
-
                 Console.WriteLine("Connection Successful");
-
             }
-
             catch (InvalidOperationException)
-
             {
-
                 Console.WriteLine("Invalid connection string or connection already open.");
-
-
             }
-
-            catch (SqlException e)
-
+            catch (SqlException ex)
             {
-
-                Console.WriteLine($"SQL Error: {e.Message}");
-
-
-                Console.WriteLine($"SQL Error: {e.Message}");
-
-
-                if (e.Message.Contains("attach an auto-named database"))
-
-                {
-
-                    Console.WriteLine("Fix: Database is already attached OR file is in use.");
-
-
-                    Console.WriteLine("Try this:");
-
-                    Console.WriteLine("1. Remove AttachDbFilename from connection string");
-
-                    Console.WriteLine("2. Use Initial Catalog instead");
-
-                    Console.WriteLine("3. Or delete/rename duplicate DB in SQL Server");
-
-                }
-
-
-
+                Console.WriteLine($"SQL Error: {ex.Message}");
             }
-
             catch (Exception ex)
-
             {
-
-                Console.WriteLine($"Error connecting to database: {ex.Message}");
-
-
+                Console.WriteLine($"Unexpected Error: {ex.Message}");
             }
-
-        }
-    }    
+        } 
+         public void closeconnections()
+         {
+            if (conn != null && conn.State == System.Data.ConnectionState.Open)
+            {
+                conn.Close();
+                Console.WriteLine("Database connection closed.");
+            }
+         }
+    }
+}

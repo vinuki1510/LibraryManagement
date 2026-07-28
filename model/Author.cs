@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace LibraryManagement.model
 {
     public class Author
-    {
+    { 
         public int AuthorID { get; set; }
         public String AuthorName { get; set; }
 
         public Author(int authorID, string inauthorName)
         {
-            AuthorID = authorID;
+            AuthorID = authorID; 
             AuthorName = inauthorName;
         }
     }

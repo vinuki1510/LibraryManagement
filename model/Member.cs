@@ -15,6 +15,6 @@ namespace LibraryManagement.model
         {
             MemberID = memberID;
             MemberName = memberName;
-        }
+        } 
     }
 }
