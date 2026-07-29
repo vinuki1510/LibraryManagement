@@ -34,6 +34,7 @@ namespace LibraryManagement.View
 
             return Convert.ToInt32(Console.ReadLine());
         }
+
         public int MemberMenu()
         {
             Console.WriteLine("\nMember Menu:");

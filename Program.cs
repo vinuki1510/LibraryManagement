@@ -72,21 +72,23 @@ namespace LibraryManagement
         {
             myView.DisplayMessage("Enter username: ");
             string username = myView.GetInput();
-            myView.DisplayMessage("Enter password: ");
-            string password = myView.GetInput();
-
-            // Username validation
-            if (string.IsNullOrWhiteSpace(username))
+       
+            // Username Validation
+            while (string.IsNullOrWhiteSpace(username))
             {
                 myView.DisplayMessage("Username cannot be empty.");
-                return;
+                myView.DisplayMessage("Enter username: ");
+                username = myView.GetInput();
             }
 
-            if (username.Length < 4 || username.Length > 20)
+            while (username.Length < 4 || username.Length > 20)
             {
                 myView.DisplayMessage("Username must be between 4 and 20 characters.");
-                return;
+                myView.DisplayMessage("Enter username: ");
+                username = myView.GetInput();
             }
+            myView.DisplayMessage("Enter password: ");
+            string password = myView.GetInput();
 
             string userRole = storageManager.Login(username, password);
 
