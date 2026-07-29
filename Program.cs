@@ -154,6 +154,22 @@ namespace LibraryManagement
                 }
             }
         }
+
+        private static void SearchBooks()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== Search Books =====");
+            myView.DisplayMessage("Enter book title: ");
+
+            string title = myView.GetInput();
+
+            storageManager.SearchBook(title);
+
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+            Console.ReadKey();
+        }
         private static void StaffMenu()
         {
             bool logout = false;

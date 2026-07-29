@@ -52,9 +52,28 @@ public class StorageManager
             Console.WriteLine("Login error: " + ex.Message);
         }
         return role;
+     }
+
+    public void SearchBook(string title)
+    {
+        string sql = "SELECT * FROM Books WHERE Title LIKE @title";
+
+        using (SqlCommand cmd = new SqlCommand(sql, conn))
+        {
+            cmd.Parameters.AddWithValue("@title", "%" + title + "%");
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Console.WriteLine(reader["Title"]);
+            }
+
+            reader.Close();
+        }
     }
 
-     public void closeconnections()
+    public void closeconnections()
      {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
         {
