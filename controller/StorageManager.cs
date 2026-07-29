@@ -54,7 +54,7 @@ public class StorageManager
         return role;
     }
 
- public void closeconnections()
+     public void closeconnections()
      {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
         {

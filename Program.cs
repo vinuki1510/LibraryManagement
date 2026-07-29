@@ -24,7 +24,7 @@ namespace LibraryManagement
                 switch (choice)
                 {
                     case "1":
-                        Login();
+                        LoginMenu();
                         break;
 
                     case "3":
@@ -40,23 +40,59 @@ namespace LibraryManagement
             }
 
         }
+        
+        private static void LoginMenu()
+        {
+            bool back = false;
+            while (!back)
+            {
+                int option = myView.LoginMenu();
+                switch (option)
+                {
+                    case 1:
+                        Login("Member");
+                        break;
+                    case 2:
+                        Login("Staff");
+                        break;
+                    case 3:
+                        Login("Admin");
+                        break;
+                    case 4:
+                        back = true;
+                        break;
+                    default:
+                        myView.DisplayMessage("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
 
-        private static void Login()
+        private static void Login(string role)
         {
             myView.DisplayMessage("Enter username: ");
             string username = myView.GetInput();
             myView.DisplayMessage("Enter password: ");
             string password = myView.GetInput();
-            string role = storageManager.Login(username, password);
 
-            if (role == "Member")
+           string userRole = storageManager.Login(username, password);
+
+            if (userRole == role)
             {
-                MemberMenu();
+                switch (role)
+                {
+                    case "Member":
+                        MemberMenu();
+                        break;
+                    case "Staff":
+                        StaffMenu();
+                        break;
+                    case "Admin":
+                        AdminMenu();
+                        break;
+                }
             }
-            else if (role == "Staff")
-            {
-                StaffMenu();
-            }
+ 
             else
             {
                 myView.DisplayMessage("Invalid username or password. Please try again.");

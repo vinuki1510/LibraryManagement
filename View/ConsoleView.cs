@@ -11,15 +11,29 @@ namespace LibraryManagement.View
         public void DisplayMainMenu()
         {
             Console.WriteLine("========================================");
-            Console.WriteLine("Welcome to the Library Management System");
+            Console.WriteLine("Welcome to the Library Management System"); 
             Console.WriteLine("========================================");
 
             Console.WriteLine("\nMain Menu:"); 
             Console.WriteLine("1. Login"); 
-            Console.WriteLine("2. Exit");
+            Console.WriteLine("2. Exit");  
             Console.Write("Please enter your choice: "); 
         }
 
+        public int LoginMenu()
+        {
+            Console.Clear();
+
+            Console.WriteLine("========== LOGIN ==========");
+            Console.WriteLine("1. Member Login");
+            Console.WriteLine("2. Staff Login");
+            Console.WriteLine("3. Admin Login");
+            Console.WriteLine("4. Back");
+
+            Console.Write("\nChoose an option: ");
+
+            return Convert.ToInt32(Console.ReadLine());
+        }
         public int MemberMenu()
         {
             Console.WriteLine("\nMember Menu:");
