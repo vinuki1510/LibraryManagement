@@ -37,13 +37,15 @@ namespace LibraryManagement.View
 
         public int MemberMenu()
         {
+            Console.Clear();
+
             Console.WriteLine("\nMember Menu:");
             Console.WriteLine("1. Search Books");
             Console.WriteLine("2. Borrow Book");
             Console.WriteLine("3. View My Loans");
             Console.WriteLine("4. Logout");
             Console.Write("Please enter your choice: ");
-            return int.Parse(Console.ReadLine());
+            return GetIntInput();
         }
 
         public int StaffMenu()

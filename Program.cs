@@ -70,28 +70,34 @@ namespace LibraryManagement
 
         private static void Login(string role)
         {
-            myView.DisplayMessage("Enter username: ");
-            string username = myView.GetInput();
-       
-            // Username Validation
-            while (string.IsNullOrWhiteSpace(username))
-            {
-                myView.DisplayMessage("Username cannot be empty.");
-                myView.DisplayMessage("Enter username: ");
-                username = myView.GetInput();
-            }
+            string username;
 
-            while (username.Length < 4 || username.Length > 20)
+            myView.DisplayMessage("Enter username: ");
+            username = myView.GetInput();
+
+            // Username Validation
+            while (string.IsNullOrWhiteSpace(username) || username.Length < 4 || username.Length > 20 || username.Contains(" "))
             {
-                myView.DisplayMessage("Username must be between 4 and 20 characters.");
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    myView.DisplayMessage("Username cannot be empty.");
+                }
+                else if (username.Length < 4 || username.Length > 20)
+                {
+                    myView.DisplayMessage("Username must be between 4 and 20 characters.");
+                }
+                else if (username.Contains(" "))
+                {
+                    myView.DisplayMessage("Username cannot contain spaces.");
+                }
                 myView.DisplayMessage("Enter username: ");
                 username = myView.GetInput();
             }
             myView.DisplayMessage("Enter password: ");
             string password = myView.GetInput();
 
-            // Password Validation  
-            while (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+            while (string.IsNullOrWhiteSpace(password) ||
+           password.Length < 6)
             {
                 if (string.IsNullOrWhiteSpace(password))
                 {
@@ -101,7 +107,6 @@ namespace LibraryManagement
                 {
                     myView.DisplayMessage("Password must be at least 6 characters.");
                 }
-
                 myView.DisplayMessage("Enter password: ");
                 password = myView.GetInput();
             }
@@ -110,47 +115,74 @@ namespace LibraryManagement
 
             if (userRole == role)
             {
+                loggedInUsername = username;
+
+                myView.DisplayMessage("Login successful!");
+
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+
                 switch (role)
                 {
                     case "Member":
                         MemberMenu();
                         break;
+
                     case "Staff":
                         StaffMenu();
                         break;
+
                     case "Admin":
                         AdminMenu();
                         break;
                 }
             }
- 
             else
             {
-                myView.DisplayMessage("Invalid username or password. Please try again.");
+                myView.DisplayMessage("Invalid username, password or selected role.");
+
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
             }
         }
+
         private static void MemberMenu()
         {
-            bool logout = false;
+           bool logout = false;
+
             while (!logout)
             {
                 int option = myView.MemberMenu();
+
                 switch (option)
                 {
                     case 1:
-                        myView.DisplayMessage("Search books");
+                        SearchBooks();
                         break;
+
                     case 2:
-                        myView.DisplayMessage("Borrow book");
+                        BorrowBook();
                         break;
+
                     case 3:
-                        myView.DisplayMessage("View my loans");
+                        ViewMyLoans();
                         break;
+
                     case 4:
                         logout = true;
-                        myView.DisplayMessage("Logging out...");
-                        break; 
-                    
+
+                        loggedInUsername = "";
+
+                        myView.DisplayMessage("You have successfully logged out.");
+
+                        Console.WriteLine("Press any key to return to the main menu...");
+                        Console.ReadKey();
+                        break;
+
+                    default:
+                        myView.DisplayMessage("Invalid choice. Please try again.");
+                        Console.ReadKey();
+                        break;
                 }
             }
         }
@@ -164,10 +196,24 @@ namespace LibraryManagement
 
             string title = myView.GetInput();
 
-            storageManager.SearchBook(title);
+            while (string.IsNullOrWhiteSpace(title))
+            {
+                myView.DisplayMessage("Title cannot be empty.");
+                myView.DisplayMessage("Enter a book title: ");
+                title = myView.GetInput();
+            }
+            
+            bool bookFound = storageManager.SearchBook(title);
+
+            if (!bookFound)
+            {
+                myView.DisplayMessage(
+                    "No books were found.");
+            }
 
             Console.WriteLine();
             myView.DisplayMessage("Press any key to return...");
+
             Console.ReadKey();
         }
         private static void StaffMenu()

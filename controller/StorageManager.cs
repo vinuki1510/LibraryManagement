@@ -45,7 +45,7 @@ public class StorageManager
                 {
                     role = result.ToString();
                 }
-            }
+            } 
         }
         catch (SqlException ex)
         {
@@ -54,23 +54,37 @@ public class StorageManager
         return role;
      }
 
-    public void SearchBook(string title)
+    public bool SearchBook(string title)
     {
-        string sql = "SELECT * FROM Books WHERE Title LIKE @title";
+        bool bookFound = false;
 
-        using (SqlCommand cmd = new SqlCommand(sql, conn))
+        try
         {
-            cmd.Parameters.AddWithValue("@title", "%" + title + "%");
+            string query = "SELECT * FROM Books WHERE Title LIKE @title";
 
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                Console.WriteLine(reader["Title"]);
-            }
+                cmd.Parameters.AddWithValue("@title", "%" + title + "%");
 
-            reader.Close();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        bookFound = true;
+                        Console.WriteLine("Book ID: " + reader["BookID"]);
+                        Console.WriteLine("Title: " + reader["Title"]);
+                        Console.WriteLine("--------------------");
+                    }
+                }
+
+
+            }
         }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error searching for book: " + ex.Message);
+        }
+        return bookFound;
     }
 
     public void closeconnections()
