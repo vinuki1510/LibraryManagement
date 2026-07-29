@@ -11,7 +11,7 @@ namespace LibraryManagement
         static void Main(string[] args)
         {
 
-            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=BikeStores;Integrated Security=True;Encrypt=False;TrustServerCertificate=True;";
+            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=LibraryManagement;Integrated Security=True;Encrypt=False;TrustServerCertificate=True;";
 
             storageManager = new StorageManager(connectionString);
             myView = new ConsoleView();
@@ -216,6 +216,41 @@ namespace LibraryManagement
 
             Console.ReadKey();
         }
+
+        private static void BorrowBook()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== BORROW BOOK =====");
+            myView.DisplayMessage("Enter the Book ID:");
+
+            int bookId = myView.GetIntInput();
+
+            while (bookId <= 0)
+            {
+                myView.DisplayMessage("Book ID must be greater than 0.");
+                myView.DisplayMessage("Enter the Book ID:");
+
+                bookId = myView.GetIntInput();
+            }
+            bool borrowed = storageManager.BorrowBook(loggedInUsername, bookId);
+
+            if (borrowed)
+            {
+                myView.DisplayMessage("Book borrowed successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("The book could not be borrowed.");
+
+                myView.DisplayMessage("The Book ID may be incorrect or the book may not be available.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
+
         private static void StaffMenu()
         {
             bool logout = false;

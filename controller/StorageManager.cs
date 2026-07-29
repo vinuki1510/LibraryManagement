@@ -87,6 +87,48 @@ public class StorageManager
         return bookFound;
     }
 
+    public bool BorrowBook(string username, int bookId)
+    {
+        try
+        {
+            string checkAvailabilityQuery = "SELECT COUNT(*) FROM Loans WHERE BookID = @bookId AND ReturnDate IS NULL";
+            using (SqlCommand checkCmd = new SqlCommand(checkAvailabilityQuery, conn))
+            {
+                checkCmd.Parameters.AddWithValue("@bookId", bookId);
+                int count = (int)checkCmd.ExecuteScalar();
+                if (count > 0)
+                {
+                    Console.WriteLine("Book is currently unavailable.");
+                    return false;
+                }
+            }
+            string insertLoanQuery = "INSERT INTO Loans (Username, BookID, LoanDate) VALUES (@username, @bookId, @loanDate)";
+            using (SqlCommand insertCmd = new SqlCommand(insertLoanQuery, conn))
+            {
+                insertCmd.Parameters.AddWithValue("@username", username);
+                insertCmd.Parameters.AddWithValue("@bookId", bookId);
+                insertCmd.Parameters.AddWithValue("@loanDate", DateTime.Now);
+                int rowsAffected = insertCmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    Console.WriteLine("Book borrowed successfully.");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Failed to borrow the book.");
+                    return false;
+                }
+            }
+
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error borrowing book: " + ex.Message);
+            return false;
+        }
+    }
+        
     public void closeconnections()
      {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
