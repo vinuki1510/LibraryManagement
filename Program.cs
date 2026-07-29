@@ -90,6 +90,22 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter password: ");
             string password = myView.GetInput();
 
+            // Password Validation  
+            while (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+            {
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    myView.DisplayMessage("Password cannot be empty.");
+                }
+                else
+                {
+                    myView.DisplayMessage("Password must be at least 6 characters.");
+                }
+
+                myView.DisplayMessage("Enter password: ");
+                password = myView.GetInput();
+            }
+
             string userRole = storageManager.Login(username, password);
 
             if (userRole == role)
