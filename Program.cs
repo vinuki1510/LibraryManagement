@@ -8,6 +8,8 @@ namespace LibraryManagement
     {
         private static StorageManager storageManager;
         private static ConsoleView myView;
+        private static string loggedInUsername;
+
         static void Main(string[] args)
         {
 
@@ -169,9 +171,9 @@ namespace LibraryManagement
                         break;
 
                     case 4:
-                        logout = true;
-
+                        myView.DisplayMessage("Logging out " + loggedInUsername + "...");
                         loggedInUsername = "";
+                        logout = true;
 
                         myView.DisplayMessage("You have successfully logged out.");
 
