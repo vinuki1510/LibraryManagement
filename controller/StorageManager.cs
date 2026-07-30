@@ -9,7 +9,8 @@ namespace LibraryManagement.SqlClient;
 
 public class StorageManager
 {
-    private SqlConnection conn;
+    private SqlConnection? conn;
+
     public StorageManager(string connectionString)
     {
         try
@@ -30,36 +31,75 @@ public class StorageManager
         {
             Console.WriteLine($"Unexpected Error: {ex.Message}");
         }
-    } 
-     public string Login(string username, string password)
-     {
-        string role = "";
+    }
+
+    public string Login(string username, string password)
+    {
+        string role = string.Empty;
         try
         {
+            Console.WriteLine("MemberMenu");
+
+            if (conn == null)
+            {
+                Console.WriteLine("No database connection.");
+                return role;
+            }
+
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.Open();
+            }
+
+            Console.WriteLine("Connection is open.");
+
             using (SqlCommand cmd = new SqlCommand("SELECT Role FROM Users WHERE Username = @username AND Password = @password", conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", password);
+
                 object result = cmd.ExecuteScalar();
-                if (result != null)
+
+                if (result != null && result != DBNull.Value)
                 {
-                    role = result.ToString();
+                    role = result.ToString() ?? string.Empty;
+                    Console.WriteLine("Role found: " + role);
                 }
-            } 
+                else
+                {
+                    Console.WriteLine("No user found.");
+                }
+            }
         }
         catch (SqlException ex)
         {
             Console.WriteLine("Login error: " + ex.Message);
         }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine("Connection error: " + ex.Message);
+        }
         return role;
-     }
+    }
 
     public bool SearchBook(string title)
     {
         bool bookFound = false;
 
+        if (conn == null)
+        {
+            Console.WriteLine("No database connection.");
+            return bookFound;
+        }
+
         try
         {
+        
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.Open();
+            }
+
             string query = "SELECT * FROM Books WHERE Title LIKE @title";
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -76,8 +116,6 @@ public class StorageManager
                         Console.WriteLine("--------------------");
                     }
                 }
-
-
             }
         }
         catch (SqlException ex)
@@ -89,19 +127,31 @@ public class StorageManager
 
     public bool BorrowBook(string username, int bookId)
     {
+        if (conn == null)
+        {
+            Console.WriteLine("No database connection.");
+            return false;
+        }
         try
         {
+            // Ensure connection is open
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.Open();
+            }
+
             string checkAvailabilityQuery = "SELECT COUNT(*) FROM Loans WHERE BookID = @bookId AND ReturnDate IS NULL";
             using (SqlCommand checkCmd = new SqlCommand(checkAvailabilityQuery, conn))
             {
                 checkCmd.Parameters.AddWithValue("@bookId", bookId);
-                int count = (int)checkCmd.ExecuteScalar();
+                int count = Convert.ToInt32(checkCmd.ExecuteScalar());
                 if (count > 0)
                 {
                     Console.WriteLine("Book is currently unavailable.");
                     return false;
                 }
             }
+
             string insertLoanQuery = "INSERT INTO Loans (Username, BookID, LoanDate) VALUES (@username, @bookId, @loanDate)";
             using (SqlCommand insertCmd = new SqlCommand(insertLoanQuery, conn))
             {
@@ -120,7 +170,6 @@ public class StorageManager
                     return false;
                 }
             }
-
         }
         catch (SqlException ex)
         {
@@ -132,8 +181,19 @@ public class StorageManager
     public bool ViewMyLoans(string username)
     {
         bool LoansFound = false;
+        if (conn == null)
+        {
+            Console.WriteLine("No database connection.");
+            return LoansFound;
+        }
         try
         {
+            // Ensure connection is open
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.Open();
+            }
+
             string query = "SELECT * FROM Loans WHERE Username = @username";
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
@@ -154,8 +214,8 @@ public class StorageManager
                         {
                             Console.WriteLine("Return Date: " + reader["ReturnDate"]);
                             Console.WriteLine("Status: Returned");
-                            Console.WriteLine("--------------------");
                         }
+                        Console.WriteLine("--------------------");
                     }
                 }
             }
@@ -166,12 +226,37 @@ public class StorageManager
         }
         return LoansFound;
     }
+
+    public bool AddBook(string title)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Books (Title) VALUES (@title)", conn))
+            {
+                cmd.Parameters.AddWithValue("@title", title);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    return true;
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error adding book: " + ex.Message);
+        }
+
+        return false;
+    }
+
+
     public void closeconnections()
-     {
+    {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
         {
             conn.Close();
             Console.WriteLine("Database connection closed.");
         }
-     }
+    }
 }

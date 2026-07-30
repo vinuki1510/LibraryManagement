@@ -6,9 +6,9 @@ namespace LibraryManagement
 {
     internal class Program
     {
-        private static StorageManager storageManager;
-        private static ConsoleView myView;
-        private static string loggedInUsername;
+        private static StorageManager storageManager = null!;
+        private static ConsoleView myView = null!;
+        private static string loggedInUsername = string.Empty;
 
         static void Main(string[] args)
         {
@@ -297,6 +297,41 @@ namespace LibraryManagement
                 }
             }
         }
+
+        private static void AddBook()
+        {
+            Console.Clear();
+            myView.DisplayMessage("===== ADD BOOK =====");
+            myView.DisplayMessage("Enter book title:");
+
+            string title = myView.GetInput();
+
+            while (string.IsNullOrWhiteSpace(title))
+            {
+                myView.DisplayMessage("Book title cannot be empty.");
+                myView.DisplayMessage("Enter book title:");
+
+                title = myView.GetInput();
+            }
+
+            bool added = storageManager.AddBook(title);
+            if (added)
+            {
+                myView.DisplayMessage(
+                    "Book added successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage(
+                    "Book could not be added.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage(
+                "Press any key to return...");
+
+            Console.ReadKey();
+        }
+
         private static void AdminMenu()
         {
             bool logout = false;

@@ -32,12 +32,11 @@ namespace LibraryManagement.View
 
             Console.Write("\nChoose an option: ");
 
-            return Convert.ToInt32(Console.ReadLine());
+            return ReadIntFromConsole();
         }
 
         public int MemberMenu()
         {
-            Console.Clear();
 
             Console.WriteLine("\nMember Menu:");
             Console.WriteLine("1. Search Books");
@@ -45,7 +44,7 @@ namespace LibraryManagement.View
             Console.WriteLine("3. View My Loans");
             Console.WriteLine("4. Logout");
             Console.Write("Please enter your choice: ");
-            return GetIntInput();
+            return ReadIntFromConsole();
         }
 
         public int StaffMenu()
@@ -57,7 +56,7 @@ namespace LibraryManagement.View
             Console.WriteLine("4. Process returns");
             Console.WriteLine("5. Logout");
             Console.Write("Please enter your choice: ");
-            return int.Parse(Console.ReadLine());
+            return ReadIntFromConsole();
         }           
 
         public int AdminMenu()
@@ -67,7 +66,7 @@ namespace LibraryManagement.View
             Console.WriteLine("2. View staff");
             Console.WriteLine("3. Logout");
             Console.Write("Please enter your choice: ");
-            return int.Parse(Console.ReadLine());       
+            return ReadIntFromConsole();       
         }
         public void DisplayMessage (string message)
         {
@@ -75,11 +74,23 @@ namespace LibraryManagement.View
         }
         public string GetInput()
         {
-            return Console.ReadLine();
+            return Console.ReadLine() ?? string.Empty;
         }
+
         public int GetIntInput()
         {
-           return int.Parse(Console.ReadLine());
+            return ReadIntFromConsole();
+        }
+
+        private int ReadIntFromConsole()
+        {
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out int value))
+                    return value;
+                Console.Write("Invalid input. Please enter a valid number: ");
+            }
         }
     }
 }
