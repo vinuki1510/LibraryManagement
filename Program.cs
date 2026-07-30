@@ -250,6 +250,22 @@ namespace LibraryManagement
 
             Console.ReadKey();
         }
+        private static void ViewMyLoans()
+        {
+            Console.Clear();
+            myView.DisplayMessage("===== MY LOANS =====");
+            myView.DisplayMessage("Current and returned books:");
+
+            bool hasLoans = storageManager.ViewMyLoans(loggedInUsername);
+
+            if (!hasLoans)
+            {
+                myView.DisplayMessage("You have no current loans.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+            Console.ReadKey();
+        }
 
         private static void StaffMenu()
         {

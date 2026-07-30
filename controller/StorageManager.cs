@@ -128,7 +128,44 @@ public class StorageManager
             return false;
         }
     }
-        
+
+    public bool ViewMyLoans(string username)
+    {
+        bool LoansFound = false;
+        try
+        {
+            string query = "SELECT * FROM Loans WHERE Username = @username";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@username", username);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        LoansFound = true;
+                        Console.WriteLine("Book ID: " + reader["BookID"]);
+                        Console.WriteLine("Loan Date: " + reader["LoanDate"]);
+
+                        if (reader["ReturnDate"] == DBNull.Value)
+                        {
+                            Console.WriteLine("Status: Book needs to be returned");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Return Date: " + reader["ReturnDate"]);
+                            Console.WriteLine("Status: Returned");
+                            Console.WriteLine("--------------------");
+                        }
+                    }
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error viewing loans: " + ex.Message);
+        }
+        return LoansFound;
+    }
     public void closeconnections()
      {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
