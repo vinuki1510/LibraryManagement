@@ -388,6 +388,29 @@ public class StorageManager
         return staffFound;
     }
 
+    public bool UpdateStaff(string username, string newPassword)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand("UPDATE Users " + "SET Password = @password " + "WHERE Username = @username " + "AND Role = 'Staff'", conn))
+            {
+                cmd.Parameters.AddWithValue("@username", username);
+
+                cmd.Parameters.AddWithValue("@password", newPassword);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error updating staff: " + ex.Message);
+        }
+
+        return false;
+    }
+
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)

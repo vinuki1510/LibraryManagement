@@ -609,6 +609,37 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        private static void UpdateStaff()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== UPDATE STAFF =====");
+
+            myView.DisplayMessage("Enter staff username:");
+
+            string username = myView.GetInput();
+
+            myView.DisplayMessage("Enter new password:");
+
+            string newPassword = myView.GetInput();
+
+            bool updated = storageManager.UpdateStaff(username, newPassword);
+
+            if (updated)
+            {
+                myView.DisplayMessage("Staff details updated successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Staff member was not found.");
+            }
+
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
+
     }
      
 }
