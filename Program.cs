@@ -738,6 +738,29 @@ namespace LibraryManagement
 
             Console.ReadKey();
         }
+
+        private static void DeleteMember()
+        {
+            Console.Clear();
+            myView.DisplayMessage("===== DELETE MEMBER =====");
+            myView.DisplayMessage("Enter member username:");
+
+            string username = myView.GetInput();
+            
+            bool deleted = storageManager.DeleteMember(username);
+
+            if (deleted)
+            {
+                myView.DisplayMessage("Member deleted successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Member was not found.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
     }
-     
 }
