@@ -249,6 +249,28 @@ public class StorageManager
         return false;
     }
 
+    public bool UpdateBook(int bookId, string newTitle)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand("UPDATE Books " + "SET Title = @title " + "WHERE BookID = @bookId", conn))
+
+            {
+                cmd.Parameters.AddWithValue("@title", newTitle);
+                cmd.Parameters.AddWithValue("@bookId", bookId);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error updating book: " + ex.Message);
+        }
+        return false;
+    }
+
     public bool RegisterMember(string username, string password)
     {
         try
@@ -285,27 +307,7 @@ public class StorageManager
         return false;
     }
 
-    public bool UpdateBook(int bookId, string newTitle)
-    {
-        try
-        {
-            using (SqlCommand cmd = new SqlCommand("UPDATE Books " + "SET Title = @title " + "WHERE BookID = @bookId", conn))
-
-            {
-                cmd.Parameters.AddWithValue("@title", newTitle);
-                cmd.Parameters.AddWithValue("@bookId", bookId);
-
-                int rowsAffected = cmd.ExecuteNonQuery();
-
-                return rowsAffected > 0;
-            }
-        }
-        catch (SqlException ex)
-        {
-            Console.WriteLine("Error updating book: " + ex.Message);
-        }
-        return false;
-    }
+   
 
     public bool ProcessReturn(int loanId)
     {
