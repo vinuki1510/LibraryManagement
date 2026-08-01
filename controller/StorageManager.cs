@@ -271,6 +271,7 @@ public class StorageManager
         return false;
     }
 
+
     public bool RegisterMember(string username, string password)
     {
         try
@@ -324,6 +325,30 @@ public class StorageManager
         {
             Console.WriteLine("Error processing return: " + ex.Message);
         }
+        return false;
+    }
+
+    public bool AddStaff(string username, string password)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand(
+                "INSERT INTO Users (Username, Password, Role) " +
+                "VALUES (@username, @password, 'Staff')", conn))
+            {
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error adding staff: " + ex.Message);
+        }
+
         return false;
     }
 

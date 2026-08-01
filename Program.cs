@@ -542,6 +542,53 @@ namespace LibraryManagement
             }
         }
 
+        private static void AddStaff()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== ADD STAFF =====");
+
+            myView.DisplayMessage("Enter staff username:");
+            string username = myView.GetInput();
+
+            while (string.IsNullOrWhiteSpace(username))
+            {
+                myView.DisplayMessage("Username cannot be empty.");
+
+                myView.DisplayMessage("Enter staff username:");
+
+                username = myView.GetInput();
+            }
+
+            myView.DisplayMessage("Enter staff password:");
+            string password = myView.GetInput();
+
+            while (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+            {
+                myView.DisplayMessage("Password must be at least 6 characters.");
+
+                myView.DisplayMessage("Enter staff password:");
+
+                password = myView.GetInput();
+            }
+
+            bool added = storageManager.AddStaff(username, password);
+
+            if (added)
+            {
+                myView.DisplayMessage("Staff member added successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Staff member could not be added.");
+            }
+
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
+
     }
      
 }
