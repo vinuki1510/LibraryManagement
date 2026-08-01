@@ -438,6 +438,30 @@ public class StorageManager
         return false;
     }
 
+    public bool AddMember(string username, string password)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Role) " + "VALUES (@username, @password, 'Member')", conn))
+            {
+                cmd.Parameters.AddWithValue("@username", username);
+
+                cmd.Parameters.AddWithValue("@password", password);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error adding member: " + ex.Message);
+        }
+        return false;
+    }
+
+
+
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)

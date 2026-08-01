@@ -660,6 +660,36 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        private static void AddMember()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== ADD MEMBER =====");
+
+            myView.DisplayMessage("Enter member username:");
+
+            string username = myView.GetInput();
+
+            myView.DisplayMessage("Enter member password:");
+
+            string password = myView.GetInput();
+
+            bool added = storageManager.AddMember(username, password);
+
+            if (added)
+            {
+                myView.DisplayMessage("Member added successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Member could not be added.");
+            }
+
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
     }
      
 }
