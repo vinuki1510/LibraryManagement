@@ -153,6 +153,8 @@ namespace LibraryManagement
         {
            bool logout = false;
 
+            Console.WriteLine("========= MEMBER MENU =========");
+
             while (!logout)
             {
                 int option = myView.MemberMenu();
@@ -273,6 +275,9 @@ namespace LibraryManagement
         private static void StaffMenu()
         {
             bool logout = false;
+
+            Console.WriteLine("========= STAFF MENU =========");
+
             while (!logout)
             {
                 int option = myView.StaffMenu();
@@ -469,6 +474,7 @@ namespace LibraryManagement
         private static void AdminMenu()
         {
             bool logout = false;
+            Console.WriteLine("========= ADMIN MENU =========");
             while (!logout)
             {
                 int option = myView.AdminMenu();
