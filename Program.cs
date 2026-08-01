@@ -707,6 +707,37 @@ namespace LibraryManagement
 
             Console.ReadKey();
         }
+
+        private static void UpdateMember()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== UPDATE MEMBER =====");
+
+            myView.DisplayMessage("Enter member username:");
+
+            string username = myView.GetInput();
+
+            myView.DisplayMessage("Enter new password:");
+
+            string newPassword = myView.GetInput();
+
+            bool updated = storageManager.UpdateMember(username, newPassword);
+
+            if (updated)
+            {
+                myView.DisplayMessage("Member details updated successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Member was not found.");
+            }
+
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
     }
      
 }

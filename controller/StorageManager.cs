@@ -490,6 +490,29 @@ public class StorageManager
         return membersFound;
     }
 
+    public bool UpdateMember(string username, string newPassword)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand("UPDATE Users " + "SET Password = @password " + "WHERE Username = @username " + "AND Role = 'Member'", conn))
+            {
+                cmd.Parameters.AddWithValue("@username", username);
+
+                cmd.Parameters.AddWithValue("@password", newPassword);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error updating member: " + ex.Message);
+        }
+
+        return false;
+    }
+
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
