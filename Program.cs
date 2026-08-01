@@ -332,6 +332,62 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        private static void RegisterMember()
+        {
+            Console.Clear();
+            myView.DisplayMessage("===== REGISTER MEMBER =====");
+            myView.DisplayMessage("Enter member username:");
+            string username = myView.GetInput();
+            while (string.IsNullOrWhiteSpace(username) || username.Length < 4 || username.Length > 20 || username.Contains(" "))
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    myView.DisplayMessage("Username cannot be empty.");
+                }
+                else if (username.Length < 4 || username.Length > 20)
+                {
+                    myView.DisplayMessage("Username must be between 4 and 20 characters.");
+                }
+                else if (username.Contains(" "))
+                {
+                    myView.DisplayMessage("Username cannot contain spaces.");
+                }
+                myView.DisplayMessage("Enter member username:");
+                username = myView.GetInput();
+            }
+
+            myView.DisplayMessage("Enter member password:");
+            string password = myView.GetInput();
+
+            while (string.IsNullOrWhiteSpace(password) ||
+           password.Length < 6)
+            {
+                myView.DisplayMessage(
+                    "Password must be at least 6 characters.");
+
+                myView.DisplayMessage(
+                    "Enter member password:");
+
+                password = myView.GetInput();
+            }
+
+            bool registered = storageManager.RegisterMember(username, password);
+            if (registered)
+            {
+                myView.DisplayMessage(
+                    "Member registered successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage(
+                    "Member could not be registered.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage(
+                "Press any key to return...");
+            Console.ReadKey();
+        }
+
         private static void AdminMenu()
         {
             bool logout = false;

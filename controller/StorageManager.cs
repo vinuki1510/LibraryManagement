@@ -94,7 +94,7 @@ public class StorageManager
 
         try
         {
-        
+
             if (conn.State != System.Data.ConnectionState.Open)
             {
                 conn.Open();
@@ -250,7 +250,41 @@ public class StorageManager
         return false;
     }
 
+    public bool RegisterMember(string username, string password)
+    {
+        try
+        {
+            using (SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Username = @username", conn))
+            {
+                checkCommand.Parameters.AddWithValue("@username", username);
+                int userCount = Convert.ToInt32(checkCommand.ExecuteScalar());
 
+                if (userCount > 0)
+                {
+                    Console.WriteLine(
+                        "This username already exists.");
+
+                    return false;
+                }
+            }
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Role) " + "VALUES (@username, @password, 'Member')", conn))
+            {
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    return true;
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error registering member: " + ex.Message);
+        }
+
+        return false;
+    }
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
