@@ -690,6 +690,23 @@ namespace LibraryManagement
 
             Console.ReadKey();
         }
+
+        private static void ViewMember()
+        {
+            Console.Clear();
+            myView.DisplayMessage("===== VIEW MEMBER =====");
+
+            bool memberFound = storageManager.ViewMembers();
+
+            if (!memberFound)
+            {
+                myView.DisplayMessage("No members were found.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
     }
      
 }
