@@ -363,7 +363,37 @@ public class StorageManager
         return false;
     }
 
-   
+    public bool ViewMembers()
+    {
+        bool membersFound = false;
+
+        try
+        {
+            string query = "SELECT Username, Role " + "FROM Users " + "WHERE Role = 'Member'";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        membersFound = true;
+
+                        Console.WriteLine("Username: " + reader["Username"]);
+
+                        Console.WriteLine("Role: " + reader["Role"]);
+
+                        Console.WriteLine("--------------------");
+                    }
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine(("Error viewing members: " + ex.Message));
+        }
+        return membersFound;
+    }
 
     public bool ProcessReturn(int loanId)
     {
@@ -515,7 +545,7 @@ public class StorageManager
         return false;
     }
 
-    public bool ViewMembers()
+    public bool ViewMember()
     {
         bool membersFound = false;
 
