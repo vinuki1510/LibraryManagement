@@ -388,6 +388,59 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        private static void UpdateBook()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== UPDATE BOOK =====");
+
+            myView.DisplayMessage("Enter Book ID:");
+
+            int bookId = myView.GetIntInput();
+
+            while (bookId <= 0)
+            {
+                myView.DisplayMessage("Book ID must be greater than 0.");
+
+                myView.DisplayMessage("Enter Book ID:");
+
+                bookId = myView.GetIntInput();
+            }
+
+            myView.DisplayMessage("Enter the new book title:");
+
+            string newTitle = myView.GetInput();
+
+            while (string.IsNullOrWhiteSpace(newTitle))
+            {
+                myView.DisplayMessage(
+                    "Book title cannot be empty.");
+
+                myView.DisplayMessage(
+                    "Enter the new book title:");
+
+                newTitle = myView.GetInput();
+            }
+
+            bool updated = storageManager.UpdateBook(bookId, newTitle);
+
+            if (updated)
+            {
+                myView.DisplayMessage(
+                    "Book updated successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage(
+                    "Book was not found.");
+            }
+
+            Console.WriteLine();
+            myView.DisplayMessage(
+                "Press any key to return...");
+            Console.ReadKey();
+        }
+
         private static void AdminMenu()
         {
             bool logout = false;

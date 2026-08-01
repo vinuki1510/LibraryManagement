@@ -285,6 +285,29 @@ public class StorageManager
 
         return false;
     }
+
+    public bool UpdateBook(int bookId, string newTitle)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand("UPDATE Books " + "SET Title = @title " + "WHERE BookID = @bookId", conn))
+
+            {
+                cmd.Parameters.AddWithValue("@title", newTitle);
+                cmd.Parameters.AddWithValue("@bookId", bookId);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error updating book: " + ex.Message);
+        }
+        return false;
+    }
+
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
