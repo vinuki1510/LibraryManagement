@@ -11,13 +11,13 @@ namespace LibraryManagement.View
         public void DisplayMainMenu()
         {
             Console.WriteLine("========================================");
-            Console.WriteLine("Welcome to the Library Management System"); 
+            Console.WriteLine("Welcome to the Library Management System");
             Console.WriteLine("========================================");
 
-            Console.WriteLine("\nMain Menu:"); 
-            Console.WriteLine("1. Login"); 
-            Console.WriteLine("2. Exit");  
-            Console.Write("Please enter your choice: "); 
+            Console.WriteLine("\nMain Menu:");
+            Console.WriteLine("1. Login");
+            Console.WriteLine("3. Exit");
+            Console.Write("Please enter your choice: ");
         }
 
         public int LoginMenu()
@@ -48,38 +48,41 @@ namespace LibraryManagement.View
 
         public int StaffMenu()
         {
-            Console.WriteLine("1. Add Books");
-            Console.WriteLine("2. Update Books");
-            Console.WriteLine("3. Delete Books");
-            Console.WriteLine("4. Register member");
-            Console.WriteLine("5. View member");
-            Console.WriteLine("6. Delete member");
-            Console.WriteLine("7. Process returns");
-            Console.WriteLine("8. Logout");
-
-            Console.Write("Please enter your choice: ");
-            return ReadIntFromConsole();
-        }           
-
-        public int AdminMenu()
-        {
-            Console.WriteLine("1. Add staff");
-            Console.WriteLine("2. View staff");
-            Console.WriteLine("3. Update staff");
-            Console.WriteLine("4. Delete staff");
-            Console.WriteLine("5. Add member");
-            Console.WriteLine("6. View member");
-            Console.WriteLine("7. Update member");  
-            Console.WriteLine("8. Delete member");
+            Console.WriteLine("1. Add Book");
+            Console.WriteLine("2. View Books");
+            Console.WriteLine("3. Update Book");
+            Console.WriteLine("4. Delete Book");
+            Console.WriteLine("5. Register Member");
+            Console.WriteLine("6. View Members");
+            Console.WriteLine("7. Delete Member");
+            Console.WriteLine("8. Process Returns");
             Console.WriteLine("9. Logout");
 
             Console.Write("Please enter your choice: ");
-            return ReadIntFromConsole();       
+            return ReadIntFromConsole();
         }
-        public void DisplayMessage (string message)
+
+        public int AdminMenu()
+        {
+            Console.WriteLine("1. Add Staff");
+            Console.WriteLine("2. View Staff");
+            Console.WriteLine("3. Update Staff");
+            Console.WriteLine("4. Delete Staff");
+            Console.WriteLine("5. Add Member");
+            Console.WriteLine("6. View Members");
+            Console.WriteLine("7. Update Member");
+            Console.WriteLine("8. Delete Member");
+            Console.WriteLine("9. Logout");
+
+            Console.Write("Please enter your choice: ");
+            return ReadIntFromConsole();
+        }
+
+        public void DisplayMessage(string message)
         {
             Console.WriteLine(message);
         }
+
         public string GetInput()
         {
             return Console.ReadLine() ?? string.Empty;
