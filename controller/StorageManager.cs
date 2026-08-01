@@ -303,6 +303,29 @@ public class StorageManager
         return false;
     }
 
+    public bool DeleteBook(int bookId)
+    {
+        try
+        {
+            string query = "DELETE FROM Books " + "WHERE BookID = @bookId";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@bookId", bookId);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error deleting book: " + ex.Message);
+        }
+        return false;
+    }
+
+
 
     public bool RegisterMember(string username, string password)
     {

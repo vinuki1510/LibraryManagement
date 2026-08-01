@@ -419,6 +419,37 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        private static void DeleteBook()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== DELETE BOOK =====");
+            myView.DisplayMessage("Enter Book ID:");
+
+            int bookId = myView.GetIntInput();
+
+            while (bookId <= 0)
+            {
+                myView.DisplayMessage("Book ID must be greater than 0.");
+                myView.DisplayMessage("Enter Book ID:");
+                bookId = myView.GetIntInput();
+            }
+            bool deleted = storageManager.DeleteBook(bookId);
+            if (deleted)
+            {
+                myView.DisplayMessage("Book deleted successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Book was not found.");
+            }
+            Console.WriteLine();
+
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
+
         private static void RegisterMember()
         {
             Console.Clear();
