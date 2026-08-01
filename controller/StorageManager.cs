@@ -411,6 +411,33 @@ public class StorageManager
         return false;
     }
 
+    public bool DeleteStaff(string username)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand(
+                "DELETE FROM Users " +
+                "WHERE Username = @username " +
+                "AND Role = 'Staff'", conn))
+            {
+                cmd.Parameters.AddWithValue(
+                    "@username", username);
+
+                int rowsAffected =
+                    cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine(
+                "Error deleting staff: " + ex.Message);
+        }
+
+        return false;
+    }
+
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)

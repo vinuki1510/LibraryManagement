@@ -20,7 +20,7 @@ namespace LibraryManagement
             myView = new ConsoleView();
             bool exit = false;
             while (!exit)
-            { 
+            {
                 myView.DisplayMainMenu();
                 string choice = myView.GetInput();
 
@@ -43,7 +43,7 @@ namespace LibraryManagement
             }
 
         }
-        
+
         private static void LoginMenu()
         {
             bool back = false;
@@ -151,7 +151,7 @@ namespace LibraryManagement
 
         private static void MemberMenu()
         {
-           bool logout = false;
+            bool logout = false;
 
             Console.WriteLine("========= MEMBER MENU =========");
 
@@ -207,7 +207,7 @@ namespace LibraryManagement
                 myView.DisplayMessage("Enter a book title: ");
                 title = myView.GetInput();
             }
-            
+
             bool bookFound = storageManager.SearchBook(title);
 
             if (!bookFound)
@@ -452,7 +452,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
-       
+
 
         private static void ProcessReturns()
         {
@@ -478,7 +478,7 @@ namespace LibraryManagement
             }
             Console.WriteLine();
             myView.DisplayMessage("Press any key to return...");
-            
+
             Console.ReadKey();
         }
 
@@ -513,10 +513,10 @@ namespace LibraryManagement
                         break;
                     case 7:
                         myView.DisplayMessage("Update Member");
-                        break; 
+                        break;
                     case 8:
                         myView.DisplayMessage("Delete Member");
-                        break;      
+                        break;
                     case 9:
                         myView.DisplayMessage("Logging out " + loggedInUsername + "...");
 
@@ -536,7 +536,7 @@ namespace LibraryManagement
 
                         Console.ReadKey();
                         break;
-                   
+
 
                 }
             }
@@ -637,6 +637,26 @@ namespace LibraryManagement
             Console.WriteLine();
             myView.DisplayMessage("Press any key to return...");
 
+            Console.ReadKey();
+        }
+
+        private static void DeleteStaff()
+        {
+            Console.Clear();
+            myView.DisplayMessage("===== DELETE STAFF =====");
+            myView.DisplayMessage("Enter staff username:");
+            string username = myView.GetInput();
+            bool deleted = storageManager.DeleteStaff(username);
+            if (deleted)
+            {
+                myView.DisplayMessage("Staff member deleted successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Staff member was not found.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
             Console.ReadKey();
         }
 
