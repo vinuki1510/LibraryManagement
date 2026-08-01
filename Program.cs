@@ -287,24 +287,27 @@ namespace LibraryManagement
                         myView.DisplayMessage("Add books");
                         break;
                     case 2:
-                        myView.DisplayMessage("Update books");
+                        myView.DisplayMessage("View books");
                         break;
                     case 3:
-                        myView.DisplayMessage("Delete books");
+                        myView.DisplayMessage("Update books");
                         break;
                     case 4:
-                        myView.DisplayMessage("Register member");
+                        myView.DisplayMessage("Delete books");
                         break;
                     case 5:
-                        myView.DisplayMessage("View member");
+                        myView.DisplayMessage("Register member");
                         break;
                     case 6:
-                        myView.DisplayMessage("Delete member");
+                        myView.DisplayMessage("View member");
                         break;
                     case 7:
-                        myView.DisplayMessage("Process returns");
+                        myView.DisplayMessage("Delete member");
                         break;
                     case 8:
+                        myView.DisplayMessage("Process returns");
+                        break;
+                    case 9:
                         logout = true;
                         myView.DisplayMessage("Logging out...");
                         break;
@@ -343,6 +346,26 @@ namespace LibraryManagement
             Console.WriteLine();
             myView.DisplayMessage(
                 "Press any key to return...");
+
+            Console.ReadKey();
+        }
+
+        private static void ViewBooks()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== VIEW BOOKS =====");
+
+            bool booksFound = storageManager.ViewBooks();
+
+            if (!booksFound)
+            {
+                myView.DisplayMessage("No books were found.");
+            }
+
+            Console.WriteLine();
+
+            myView.DisplayMessage("Press any key to return...");
 
             Console.ReadKey();
         }

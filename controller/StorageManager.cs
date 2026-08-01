@@ -249,6 +249,38 @@ public class StorageManager
         return false;
     }
 
+    public bool ViewBooks()
+    {
+        bool booksFound = false;
+
+        try
+        {
+            string query = "SELECT * FROM Books";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        booksFound = true;
+
+                        Console.WriteLine("Book ID: " + reader["BookID"]);
+
+                        Console.WriteLine("Title: " + reader["Title"]);
+
+                        Console.WriteLine("--------------------");
+                    }
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error viewing books: " + ex.Message);
+        }
+        return booksFound;
+    }
+
     public bool UpdateBook(int bookId, string newTitle)
     {
         try
