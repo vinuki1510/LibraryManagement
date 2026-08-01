@@ -395,6 +395,28 @@ public class StorageManager
         return membersFound;
     }
 
+    public bool DeleteMember(string username)
+    {
+        try
+        {
+            string query = "DELETE FROM Users " + "WHERE Username = @username " + "AND Role = 'Member'";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@username", username);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error deleting member: " + ex.Message);
+        }
+        return false;
+    }
+
     public bool ProcessReturn(int loanId)
     {
         try
@@ -593,27 +615,6 @@ public class StorageManager
         catch (SqlException ex)
         {
             Console.WriteLine("Error updating member: " + ex.Message);
-        }
-
-        return false;
-    }
-
-    public bool DeleteMember(string username)
-    {
-        try
-        {
-            using (SqlCommand cmd = new SqlCommand("DELETE FROM Users " + "WHERE Username = @username " + "AND Role = 'Member'", conn))
-            {
-                cmd.Parameters.AddWithValue("@username", username);
-
-                int rowsAffected = cmd.ExecuteNonQuery();
-
-                return rowsAffected > 0;
-            }
-        }
-        catch (SqlException ex)
-        {
-            Console.WriteLine("Error deleting member: " + ex.Message);
         }
 
         return false;

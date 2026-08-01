@@ -455,7 +455,9 @@ namespace LibraryManagement
             Console.Clear();
             myView.DisplayMessage("===== REGISTER MEMBER =====");
             myView.DisplayMessage("Enter member username:");
+
             string username = myView.GetInput();
+
             while (string.IsNullOrWhiteSpace(username) || username.Length < 4 || username.Length > 20 || username.Contains(" "))
             {
                 if (string.IsNullOrWhiteSpace(username))
@@ -477,14 +479,11 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter member password:");
             string password = myView.GetInput();
 
-            while (string.IsNullOrWhiteSpace(password) ||
-           password.Length < 6)
+            while (string.IsNullOrWhiteSpace(password) || password.Length < 6)
             {
-                myView.DisplayMessage(
-                    "Password must be at least 6 characters.");
+                myView.DisplayMessage("Password must be at least 6 characters.");
 
-                myView.DisplayMessage(
-                    "Enter member password:");
+                myView.DisplayMessage("Enter member password:");
 
                 password = myView.GetInput();
             }
@@ -492,17 +491,14 @@ namespace LibraryManagement
             bool registered = storageManager.RegisterMember(username, password);
             if (registered)
             {
-                myView.DisplayMessage(
-                    "Member registered successfully.");
+                myView.DisplayMessage("Member registered successfully.");
             }
             else
             {
-                myView.DisplayMessage(
-                    "Member could not be registered.");
+                myView.DisplayMessage("Member could not be registered.");
             }
             Console.WriteLine();
-            myView.DisplayMessage(
-                "Press any key to return...");
+            myView.DisplayMessage("Press any key to return...");
             Console.ReadKey();
         }
 
@@ -517,6 +513,43 @@ namespace LibraryManagement
             if (!membersFound)
             {
                 myView.DisplayMessage("No members were found.");
+            }
+
+            Console.WriteLine();
+
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
+
+        private static void DeleteMember()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== DELETE MEMBER =====");
+
+            myView.DisplayMessage("Enter the member username:");
+
+            string username = myView.GetInput();
+
+            while (string.IsNullOrWhiteSpace(username))
+            {
+                myView.DisplayMessage("Username cannot be empty.");
+
+                myView.DisplayMessage("Enter the member username:");
+
+                username = myView.GetInput();
+            }
+
+            bool deleted = storageManager.DeleteMember(username);
+
+            if (deleted)
+            {
+                myView.DisplayMessage("Member deleted successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Member was not found.");
             }
 
             Console.WriteLine();
@@ -811,10 +844,10 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
-        private static void DeleteMember()
+        private static void DeleteMembers()
         {
             Console.Clear();
-            myView.DisplayMessage("===== DELETE MEMBER =====");
+            myView.DisplayMessage("===== DELETE MEMBERS =====");
             myView.DisplayMessage("Enter member username:");
 
             string username = myView.GetInput();
