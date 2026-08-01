@@ -1,6 +1,7 @@
 ﻿using LibraryManagement.controller;
 using LibraryManagement.SqlClient;
 using LibraryManagement.View;
+using System.Diagnostics;
 
 namespace LibraryManagement
 {
@@ -413,11 +414,9 @@ namespace LibraryManagement
 
             while (string.IsNullOrWhiteSpace(newTitle))
             {
-                myView.DisplayMessage(
-                    "Book title cannot be empty.");
+                myView.DisplayMessage("Book title cannot be empty.");
 
-                myView.DisplayMessage(
-                    "Enter the new book title:");
+                myView.DisplayMessage("Enter the new book title:");
 
                 newTitle = myView.GetInput();
             }
@@ -426,18 +425,44 @@ namespace LibraryManagement
 
             if (updated)
             {
-                myView.DisplayMessage(
-                    "Book updated successfully.");
+                myView.DisplayMessage("Book updated successfully.");
             }
             else
             {
-                myView.DisplayMessage(
-                    "Book was not found.");
+                myView.DisplayMessage("Book was not found.");
             }
 
             Console.WriteLine();
-            myView.DisplayMessage(
-                "Press any key to return...");
+            myView.DisplayMessage("Press any key to return...");
+            
+            Console.ReadKey();
+        }
+
+        private static void ProcessReturns()
+        {
+            Console.Clear();
+            myView.DisplayMessage("===== PROCESS RETURNS =====");
+            myView.DisplayMessage("Enter Loan ID:");
+            int loanId = myView.GetIntInput();
+            while (loanId <= 0)
+            {
+                myView.DisplayMessage("Loan ID must be greater than 0.");
+                myView.DisplayMessage("Enter Loan ID:");
+                loanId = myView.GetIntInput();
+            }
+            bool returned = storageManager.ProcessReturn(loanId);
+            if (returned)
+            {
+                myView.DisplayMessage("Book return processed successfully.");
+            }
+            else
+            {
+                myView.DisplayMessage("Return could not be processed.");
+                myView.DisplayMessage("The Loan ID may be incorrect or the book may already be returned.");
+            }
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+            
             Console.ReadKey();
         }
 

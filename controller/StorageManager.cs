@@ -308,6 +308,24 @@ public class StorageManager
         return false;
     }
 
+    public bool ProcessReturn(int loanId)
+    {
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand("UPDATE Loans " + "SET ReturnDate = GETDATE() " + "WHERE LoanID = @loanId " + "AND ReturnDate IS NULL", conn))
+            {
+                cmd.Parameters.AddWithValue("@loanId", loanId);
+                int rowsAffected = cmd.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error processing return: " + ex.Message);
+        }
+        return false;
+    }
+
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)
