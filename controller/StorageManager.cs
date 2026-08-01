@@ -352,6 +352,42 @@ public class StorageManager
         return false;
     }
 
+    public bool ViewStaff()
+    {
+        bool staffFound = false;
+
+        try
+        {
+            using (SqlCommand cmd = new SqlCommand(
+                "SELECT Username, Role FROM Users WHERE Role = 'Staff'",
+                conn))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        staffFound = true;
+
+                        Console.WriteLine(
+                            "Username: " + reader["Username"]);
+
+                        Console.WriteLine(
+                            "Role: " + reader["Role"]);
+
+                        Console.WriteLine("--------------------");
+                    }
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine(
+                "Error viewing staff: " + ex.Message);
+        }
+
+        return staffFound;
+    }
+
     public void closeconnections()
     {
         if (conn != null && conn.State == System.Data.ConnectionState.Open)

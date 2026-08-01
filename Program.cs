@@ -589,6 +589,26 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        private static void ViewStaff()
+        {
+            Console.Clear();
+
+            myView.DisplayMessage("===== VIEW STAFF =====");
+
+            bool staffFound =
+                storageManager.ViewStaff();
+
+            if (!staffFound)
+            {
+                myView.DisplayMessage("No staff members were found.");
+            }
+
+            Console.WriteLine();
+            myView.DisplayMessage("Press any key to return...");
+
+            Console.ReadKey();
+        }
+
     }
      
 }
