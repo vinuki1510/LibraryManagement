@@ -37,34 +37,42 @@ namespace LibraryManagement.View
 
         public int MemberMenu()
         {
-
-            Console.WriteLine("\nMember Menu:");
             Console.WriteLine("1. Search Books");
             Console.WriteLine("2. Borrow Book");
             Console.WriteLine("3. View My Loans");
             Console.WriteLine("4. Logout");
+
             Console.Write("Please enter your choice: ");
             return ReadIntFromConsole();
         }
 
         public int StaffMenu()
         {
-            Console.WriteLine("\nStaff Menu:");
             Console.WriteLine("1. Add Books");
-            Console.WriteLine("2. Register member");
-            Console.WriteLine("3. Update books");
-            Console.WriteLine("4. Process returns");
-            Console.WriteLine("5. Logout");
+            Console.WriteLine("2. Update Books");
+            Console.WriteLine("3. Delete Books");
+            Console.WriteLine("4. Register member");
+            Console.WriteLine("5. View member");
+            Console.WriteLine("6. Delete member");
+            Console.WriteLine("7. Process returns");
+            Console.WriteLine("8. Logout");
+
             Console.Write("Please enter your choice: ");
             return ReadIntFromConsole();
         }           
 
         public int AdminMenu()
         {
-            Console.WriteLine("\nAdmin Menu:");
             Console.WriteLine("1. Add staff");
             Console.WriteLine("2. View staff");
-            Console.WriteLine("3. Logout");
+            Console.WriteLine("3. Update staff");
+            Console.WriteLine("4. Delete staff");
+            Console.WriteLine("5. Add member");
+            Console.WriteLine("6. View member");
+            Console.WriteLine("7. Update member");  
+            Console.WriteLine("8. Delete member");
+            Console.WriteLine("9. Logout");
+
             Console.Write("Please enter your choice: ");
             return ReadIntFromConsole();       
         }

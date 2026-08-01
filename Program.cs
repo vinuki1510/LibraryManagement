@@ -287,15 +287,24 @@ namespace LibraryManagement
                         myView.DisplayMessage("Add books");
                         break;
                     case 2:
-                        myView.DisplayMessage("Register member");
-                        break;
-                    case 3:
                         myView.DisplayMessage("Update books");
                         break;
+                    case 3:
+                        myView.DisplayMessage("Delete books");
+                        break;
                     case 4:
-                        myView.DisplayMessage("Process returns");
+                        myView.DisplayMessage("Register member");
                         break;
                     case 5:
+                        myView.DisplayMessage("View member");
+                        break;
+                    case 6:
+                        myView.DisplayMessage("Delete member");
+                        break;
+                    case 7:
+                        myView.DisplayMessage("Process returns");
+                        break;
+                    case 8:
                         logout = true;
                         myView.DisplayMessage("Logging out...");
                         break;
@@ -474,6 +483,8 @@ namespace LibraryManagement
         private static void AdminMenu()
         {
             bool logout = false;
+
+            Console.Clear();
             Console.WriteLine("========= ADMIN MENU =========");
             while (!logout)
             {
@@ -487,9 +498,45 @@ namespace LibraryManagement
                         myView.DisplayMessage("View staff");
                         break;
                     case 3:
+                        myView.DisplayMessage("Update staff");
+                        break;
+                    case 4:
+                        myView.DisplayMessage("Delete staff");
+                        break;
+                    case 5:
+                        myView.DisplayMessage("Add Member");
+                        break;
+                    case 6:
+                        myView.DisplayMessage("View Member");
+                        break;
+                    case 7:
+                        myView.DisplayMessage("Update Member");
+                        break; 
+                    case 8:
+                        myView.DisplayMessage("Delete Member");
+                        break;      
+                    case 9:
+                        myView.DisplayMessage("Logging out " + loggedInUsername + "...");
+
+                        loggedInUsername = "";
+
                         logout = true;
+
+                        myView.DisplayMessage("You have successfully logged out.");
+
+                        Console.WriteLine("Press any key to return to the main menu...");
+
+                        Console.ReadKey();
+                        break;
+
+                    default:
+                        myView.DisplayMessage("Invalid choice. Please try again.");
+
+                        Console.ReadKey();
+                        break;
                         myView.DisplayMessage("Logging out...");
                         break;
+
                 }
             }
         }

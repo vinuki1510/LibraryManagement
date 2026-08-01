@@ -38,7 +38,6 @@ public class StorageManager
         string role = string.Empty;
         try
         {
-            Console.WriteLine("MemberMenu");
 
             if (conn == null)
             {
