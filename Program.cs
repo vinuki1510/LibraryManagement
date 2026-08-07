@@ -7,6 +7,12 @@ namespace LibraryManagement
 {
     internal class Program
     {
+        // Named Constants to eliminate magic numbers
+        private const int MinUsernameLength = 4;
+        private const int MaxUsernameLength = 50;
+        private const int MinPasswordLength = 6;
+        private const int MinimumValidId = 0;
+
         private static StorageManager storageManager = null!;
         private static ConsoleView myView = null!;
         private static string loggedInUsername = string.Empty;
@@ -70,21 +76,19 @@ namespace LibraryManagement
 
         private static void Login(string role)
         {
-            string username;
-
             myView.DisplayMessage("Enter username: ");
-            username = myView.GetInput();
+            string username = myView.GetInput();
 
-            // Username Validation
-            while (string.IsNullOrWhiteSpace(username) || username.Length < 4 || username.Length > 50 || username.Contains(" "))
+            // Username Validation Loop
+            while (string.IsNullOrWhiteSpace(username) || username.Length < MinUsernameLength || username.Length > MaxUsernameLength || username.Contains(" "))
             {
                 if (string.IsNullOrWhiteSpace(username))
                 {
                     myView.DisplayMessage("Username cannot be empty.");
                 }
-                else if (username.Length < 4 || username.Length > 50)
+                else if (username.Length < MinUsernameLength || username.Length > MaxUsernameLength)
                 {
-                    myView.DisplayMessage("Username must be between 4 and 50 characters.");
+                    myView.DisplayMessage($"Username must be between {MinUsernameLength} and {MaxUsernameLength} characters.");
                 }
                 else if (username.Contains(" "))
                 {
@@ -97,7 +101,8 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter password: ");
             string password = myView.GetInput();
 
-            while (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+            // Password Validation Loop
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
             {
                 if (string.IsNullOrWhiteSpace(password))
                 {
@@ -105,7 +110,7 @@ namespace LibraryManagement
                 }
                 else
                 {
-                    myView.DisplayMessage("Password must be at least 6 characters.");
+                    myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
                 }
                 myView.DisplayMessage("Enter password: ");
                 password = myView.GetInput();
@@ -227,9 +232,9 @@ namespace LibraryManagement
 
             int bookId = myView.GetIntInput();
 
-            while (bookId <= 0)
+            while (bookId <= MinimumValidId)
             {
-                myView.DisplayMessage("Book ID must be greater than 0.");
+                myView.DisplayMessage($"Book ID must be greater than {MinimumValidId}.");
                 myView.DisplayMessage("Enter the Book ID:");
 
                 bookId = myView.GetIntInput();
@@ -376,9 +381,9 @@ namespace LibraryManagement
 
             int bookId = myView.GetIntInput();
 
-            while (bookId <= 0)
+            while (bookId <= MinimumValidId)
             {
-                myView.DisplayMessage("Book ID must be greater than 0.");
+                myView.DisplayMessage($"Book ID must be greater than {MinimumValidId}.");
                 myView.DisplayMessage("Enter Book ID:");
 
                 bookId = myView.GetIntInput();
@@ -422,9 +427,9 @@ namespace LibraryManagement
 
             int bookId = myView.GetIntInput();
 
-            while (bookId <= 0)
+            while (bookId <= MinimumValidId)
             {
-                myView.DisplayMessage("Book ID must be greater than 0.");
+                myView.DisplayMessage($"Book ID must be greater than {MinimumValidId}.");
                 myView.DisplayMessage("Enter Book ID:");
                 bookId = myView.GetIntInput();
             }
@@ -452,15 +457,15 @@ namespace LibraryManagement
 
             string username = myView.GetInput();
 
-            while (string.IsNullOrWhiteSpace(username) || username.Length < 4 || username.Length > 20 || username.Contains(" "))
+            while (string.IsNullOrWhiteSpace(username) || username.Length < MinUsernameLength || username.Length > MaxUsernameLength || username.Contains(" "))
             {
                 if (string.IsNullOrWhiteSpace(username))
                 {
                     myView.DisplayMessage("Username cannot be empty.");
                 }
-                else if (username.Length < 4 || username.Length > 20)
+                else if (username.Length < MinUsernameLength || username.Length > MaxUsernameLength)
                 {
-                    myView.DisplayMessage("Username must be between 4 and 20 characters.");
+                    myView.DisplayMessage($"Username must be between {MinUsernameLength} and {MaxUsernameLength} characters.");
                 }
                 else if (username.Contains(" "))
                 {
@@ -473,12 +478,10 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter member password:");
             string password = myView.GetInput();
 
-            while (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
             {
-                myView.DisplayMessage("Password must be at least 6 characters.");
-
+                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
                 myView.DisplayMessage("Enter member password:");
-
                 password = myView.GetInput();
             }
 
@@ -529,9 +532,7 @@ namespace LibraryManagement
             while (string.IsNullOrWhiteSpace(username))
             {
                 myView.DisplayMessage("Username cannot be empty.");
-
                 myView.DisplayMessage("Enter the member username:");
-
                 username = myView.GetInput();
             }
 
@@ -559,12 +560,14 @@ namespace LibraryManagement
             myView.DisplayMessage("===== PROCESS RETURNS =====");
             myView.DisplayMessage("Enter Loan ID:");
             int loanId = myView.GetIntInput();
-            while (loanId <= 0)
+
+            while (loanId <= MinimumValidId)
             {
-                myView.DisplayMessage("Loan ID must be greater than 0.");
+                myView.DisplayMessage($"Loan ID must be greater than {MinimumValidId}.");
                 myView.DisplayMessage("Enter Loan ID:");
                 loanId = myView.GetIntInput();
             }
+
             bool returned = storageManager.ProcessReturn(loanId);
             if (returned)
             {
@@ -645,16 +648,15 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter staff username:");
             string username = myView.GetInput();
 
-            // Applied consistent validation rule here
-            while (string.IsNullOrWhiteSpace(username) || username.Length < 4 || username.Length > 50 || username.Contains(" "))
+            while (string.IsNullOrWhiteSpace(username) || username.Length < MinUsernameLength || username.Length > MaxUsernameLength || username.Contains(" "))
             {
                 if (string.IsNullOrWhiteSpace(username))
                 {
                     myView.DisplayMessage("Username cannot be empty.");
                 }
-                else if (username.Length < 4 || username.Length > 50)
+                else if (username.Length < MinUsernameLength || username.Length > MaxUsernameLength)
                 {
-                    myView.DisplayMessage("Username must be between 4 and 50 characters.");
+                    myView.DisplayMessage($"Username must be between {MinUsernameLength} and {MaxUsernameLength} characters.");
                 }
                 else if (username.Contains(" "))
                 {
@@ -667,9 +669,9 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter staff password:");
             string password = myView.GetInput();
 
-            while (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
             {
-                myView.DisplayMessage("Password must be at least 6 characters.");
+                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
                 myView.DisplayMessage("Enter staff password:");
                 password = myView.GetInput();
             }
@@ -687,6 +689,7 @@ namespace LibraryManagement
 
             Console.WriteLine();
             myView.DisplayMessage("Press any key to return...");
+
             Console.ReadKey();
         }
 
@@ -716,12 +719,37 @@ namespace LibraryManagement
             myView.DisplayMessage("===== UPDATE STAFF =====");
 
             myView.DisplayMessage("Enter staff username:");
-
             string username = myView.GetInput();
 
-            myView.DisplayMessage("Enter new password:");
+            // Added Validation Loop for UpdateStaff Username
+            while (string.IsNullOrWhiteSpace(username) || username.Length < MinUsernameLength || username.Length > MaxUsernameLength || username.Contains(" "))
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    myView.DisplayMessage("Username cannot be empty.");
+                }
+                else if (username.Length < MinUsernameLength || username.Length > MaxUsernameLength)
+                {
+                    myView.DisplayMessage($"Username must be between {MinUsernameLength} and {MaxUsernameLength} characters.");
+                }
+                else if (username.Contains(" "))
+                {
+                    myView.DisplayMessage("Username cannot contain spaces.");
+                }
+                myView.DisplayMessage("Enter staff username:");
+                username = myView.GetInput();
+            }
 
+            myView.DisplayMessage("Enter new password:");
             string newPassword = myView.GetInput();
+
+            // Added Validation Loop for UpdateStaff Password
+            while (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < MinPasswordLength)
+            {
+                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                myView.DisplayMessage("Enter new password:");
+                newPassword = myView.GetInput();
+            }
 
             bool updated = storageManager.UpdateStaff(username, newPassword);
 
@@ -744,8 +772,18 @@ namespace LibraryManagement
         {
             Console.Clear();
             myView.DisplayMessage("===== DELETE STAFF =====");
+
             myView.DisplayMessage("Enter staff username:");
             string username = myView.GetInput();
+
+            // Added Validation Loop for DeleteStaff
+            while (string.IsNullOrWhiteSpace(username))
+            {
+                myView.DisplayMessage("Username cannot be empty.");
+                myView.DisplayMessage("Enter staff username:");
+                username = myView.GetInput();
+            }
+
             bool deleted = storageManager.DeleteStaff(username);
             if (deleted)
             {
@@ -767,12 +805,37 @@ namespace LibraryManagement
             myView.DisplayMessage("===== ADD MEMBER =====");
 
             myView.DisplayMessage("Enter member username:");
-
             string username = myView.GetInput();
 
-            myView.DisplayMessage("Enter member password:");
+            // Added Validation Loop for Admin AddMember Username
+            while (string.IsNullOrWhiteSpace(username) || username.Length < MinUsernameLength || username.Length > MaxUsernameLength || username.Contains(" "))
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    myView.DisplayMessage("Username cannot be empty.");
+                }
+                else if (username.Length < MinUsernameLength || username.Length > MaxUsernameLength)
+                {
+                    myView.DisplayMessage($"Username must be between {MinUsernameLength} and {MaxUsernameLength} characters.");
+                }
+                else if (username.Contains(" "))
+                {
+                    myView.DisplayMessage("Username cannot contain spaces.");
+                }
+                myView.DisplayMessage("Enter member username:");
+                username = myView.GetInput();
+            }
 
+            myView.DisplayMessage("Enter member password:");
             string password = myView.GetInput();
+
+            // Added Validation Loop for Admin AddMember Password
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
+            {
+                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                myView.DisplayMessage("Enter member password:");
+                password = myView.GetInput();
+            }
 
             bool added = storageManager.AddMember(username, password);
 
@@ -815,12 +878,37 @@ namespace LibraryManagement
             myView.DisplayMessage("===== UPDATE MEMBER =====");
 
             myView.DisplayMessage("Enter member username:");
-
             string username = myView.GetInput();
 
-            myView.DisplayMessage("Enter new password:");
+            // Added Validation Loop for Admin UpdateMember Username
+            while (string.IsNullOrWhiteSpace(username) || username.Length < MinUsernameLength || username.Length > MaxUsernameLength || username.Contains(" "))
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    myView.DisplayMessage("Username cannot be empty.");
+                }
+                else if (username.Length < MinUsernameLength || username.Length > MaxUsernameLength)
+                {
+                    myView.DisplayMessage($"Username must be between {MinUsernameLength} and {MaxUsernameLength} characters.");
+                }
+                else if (username.Contains(" "))
+                {
+                    myView.DisplayMessage("Username cannot contain spaces.");
+                }
+                myView.DisplayMessage("Enter member username:");
+                username = myView.GetInput();
+            }
 
+            myView.DisplayMessage("Enter new password:");
             string newPassword = myView.GetInput();
+
+            // Added Validation Loop for Admin UpdateMember Password
+            while (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < MinPasswordLength)
+            {
+                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                myView.DisplayMessage("Enter new password:");
+                newPassword = myView.GetInput();
+            }
 
             bool updated = storageManager.UpdateMember(username, newPassword);
 
@@ -846,6 +934,14 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter member username:");
 
             string username = myView.GetInput();
+
+            // Added Validation Loop for Admin DeleteMembers
+            while (string.IsNullOrWhiteSpace(username))
+            {
+                myView.DisplayMessage("Username cannot be empty.");
+                myView.DisplayMessage("Enter member username:");
+                username = myView.GetInput();
+            }
 
             bool deleted = storageManager.DeleteMember(username);
 

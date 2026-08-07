@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LibraryManagement.View
-{
+{ 
     public class ConsoleView
     {
         public void DisplayMainMenu()
@@ -16,7 +16,7 @@ namespace LibraryManagement.View
 
             Console.WriteLine("\nMain Menu:");
             Console.WriteLine("1. Login");
-            Console.WriteLine("3. Exit");
+            Console.WriteLine("2. Exit");
             Console.Write("Please enter your choice: ");
         }
 

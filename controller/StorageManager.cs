@@ -1,23 +1,27 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagement.SqlClient;
 
-public class StorageManager
+public class StorageManager : IDisposable
 {
-    private SqlConnection? conn;
+    private SqlConnection? _conn;
+    private readonly string _connectionString;
+    private bool _disposed;
 
     public StorageManager(string connectionString)
     {
+        _connectionString = connectionString;
+        InitializeConnection();
+    }
+
+    private void InitializeConnection()
+    {
         try
         {
-            conn = new SqlConnection(connectionString);
-            conn.Open();
+            _conn = new SqlConnection(_connectionString);
+            _conn.Open();
             Console.WriteLine("Connection Successful");
         }
         catch (InvalidOperationException)
@@ -34,21 +38,48 @@ public class StorageManager
         }
     }
 
-    // Helper method to ensure connection is ready before queries run
     private bool EnsureConnectionOpen()
     {
-        if (conn == null)
+        if (_conn == null)
         {
             Console.WriteLine("No database connection.");
             return false;
         }
 
-        if (conn.State != ConnectionState.Open)
+        if (_conn.State != ConnectionState.Open)
         {
-            conn.Open();
+            try
+            {
+                _conn.Open();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Failed to reopen connection: {ex.Message}");
+                return false;
+            }
         }
 
         return true;
+    }
+
+    private bool UserExists(string username)
+    {
+        if (!EnsureConnectionOpen()) return false;
+
+        try
+        {
+            using (SqlCommand checkCmd = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Username = @username", _conn))
+            {
+                checkCmd.Parameters.AddWithValue("@username", username);
+                int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine("Error checking user existence: " + ex.Message);
+            return false;
+        }
     }
 
     public string Login(string username, string password)
@@ -59,12 +90,12 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("SELECT Role FROM Users WHERE Username = @username AND Password = @password", conn))
+            using (SqlCommand cmd = new SqlCommand("SELECT Role FROM Users WHERE Username = @username AND Password = @password", _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", password);
 
-                object result = cmd.ExecuteScalar();
+                object? result = cmd.ExecuteScalar();
 
                 if (result != null && result != DBNull.Value)
                 {
@@ -76,6 +107,7 @@ public class StorageManager
         {
             Console.WriteLine("Login error: " + ex.Message);
         }
+
         return role;
     }
 
@@ -87,9 +119,9 @@ public class StorageManager
 
         try
         {
-            string query = "SELECT * FROM Books WHERE Title LIKE @title";
+            string query = "SELECT BookID, Title FROM Books WHERE Title LIKE @title";
 
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            using (SqlCommand cmd = new SqlCommand(query, _conn))
             {
                 cmd.Parameters.AddWithValue("@title", "%" + title + "%");
 
@@ -109,6 +141,7 @@ public class StorageManager
         {
             Console.WriteLine("Error searching for book: " + ex.Message);
         }
+
         return bookFound;
     }
 
@@ -119,10 +152,11 @@ public class StorageManager
         try
         {
             string checkAvailabilityQuery = "SELECT COUNT(*) FROM Loans WHERE BookID = @bookId AND ReturnDate IS NULL";
-            using (SqlCommand checkCmd = new SqlCommand(checkAvailabilityQuery, conn))
+            using (SqlCommand checkCmd = new SqlCommand(checkAvailabilityQuery, _conn))
             {
                 checkCmd.Parameters.AddWithValue("@bookId", bookId);
                 int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
                 if (count > 0)
                 {
                     Console.WriteLine("Book is currently unavailable.");
@@ -131,13 +165,13 @@ public class StorageManager
             }
 
             string insertLoanQuery = "INSERT INTO Loans (Username, BookID, LoanDate) VALUES (@username, @bookId, @loanDate)";
-            using (SqlCommand insertCmd = new SqlCommand(insertLoanQuery, conn))
+            using (SqlCommand insertCmd = new SqlCommand(insertLoanQuery, _conn))
             {
                 insertCmd.Parameters.AddWithValue("@username", username);
                 insertCmd.Parameters.AddWithValue("@bookId", bookId);
                 insertCmd.Parameters.AddWithValue("@loanDate", DateTime.Now);
-                int rowsAffected = insertCmd.ExecuteNonQuery();
-                return rowsAffected > 0;
+
+                return insertCmd.ExecuteNonQuery() > 0;
             }
         }
         catch (SqlException ex)
@@ -155,10 +189,11 @@ public class StorageManager
 
         try
         {
-            string query = "SELECT * FROM Loans WHERE Username = @username";
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            string query = "SELECT BookID, LoanDate, ReturnDate FROM Loans WHERE Username = @username";
+            using (SqlCommand cmd = new SqlCommand(query, _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
+
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -185,6 +220,7 @@ public class StorageManager
         {
             Console.WriteLine("Error viewing loans: " + ex.Message);
         }
+
         return loansFound;
     }
 
@@ -194,7 +230,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO Books (Title) VALUES (@title)", conn))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Books (Title) VALUES (@title)", _conn))
             {
                 cmd.Parameters.AddWithValue("@title", title);
                 return cmd.ExecuteNonQuery() > 0;
@@ -204,6 +240,7 @@ public class StorageManager
         {
             Console.WriteLine("Error adding book: " + ex.Message);
         }
+
         return false;
     }
 
@@ -215,8 +252,7 @@ public class StorageManager
 
         try
         {
-            string query = "SELECT * FROM Books";
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            using (SqlCommand cmd = new SqlCommand("SELECT BookID, Title FROM Books", _conn))
             {
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -234,6 +270,7 @@ public class StorageManager
         {
             Console.WriteLine("Error viewing books: " + ex.Message);
         }
+
         return booksFound;
     }
 
@@ -243,7 +280,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("UPDATE Books SET Title = @title WHERE BookID = @bookId", conn))
+            using (SqlCommand cmd = new SqlCommand("UPDATE Books SET Title = @title WHERE BookID = @bookId", _conn))
             {
                 cmd.Parameters.AddWithValue("@title", newTitle);
                 cmd.Parameters.AddWithValue("@bookId", bookId);
@@ -254,6 +291,7 @@ public class StorageManager
         {
             Console.WriteLine("Error updating book: " + ex.Message);
         }
+
         return false;
     }
 
@@ -263,7 +301,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("DELETE FROM Books WHERE BookID = @bookId", conn))
+            using (SqlCommand cmd = new SqlCommand("DELETE FROM Books WHERE BookID = @bookId", _conn))
             {
                 cmd.Parameters.AddWithValue("@bookId", bookId);
                 return cmd.ExecuteNonQuery() > 0;
@@ -273,6 +311,7 @@ public class StorageManager
         {
             Console.WriteLine("Error deleting book: " + ex.Message);
         }
+
         return false;
     }
 
@@ -289,9 +328,7 @@ public class StorageManager
 
         try
         {
-            string query = "SELECT Username, Role FROM Users WHERE Role = 'Member'";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            using (SqlCommand cmd = new SqlCommand("SELECT Username, Role FROM Users WHERE Role = 'Member'", _conn))
             {
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -309,6 +346,7 @@ public class StorageManager
         {
             Console.WriteLine("Error viewing members: " + ex.Message);
         }
+
         return membersFound;
     }
 
@@ -323,9 +361,7 @@ public class StorageManager
 
         try
         {
-            string query = "DELETE FROM Users WHERE Username = @username AND Role = 'Member'";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            using (SqlCommand cmd = new SqlCommand("DELETE FROM Users WHERE Username = @username AND Role = 'Member'", _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 return cmd.ExecuteNonQuery() > 0;
@@ -335,6 +371,7 @@ public class StorageManager
         {
             Console.WriteLine("Error deleting member: " + ex.Message);
         }
+
         return false;
     }
 
@@ -344,7 +381,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("UPDATE Loans SET ReturnDate = GETDATE() WHERE LoanID = @loanId AND ReturnDate IS NULL", conn))
+            using (SqlCommand cmd = new SqlCommand("UPDATE Loans SET ReturnDate = GETDATE() WHERE LoanID = @loanId AND ReturnDate IS NULL", _conn))
             {
                 cmd.Parameters.AddWithValue("@loanId", loanId);
                 return cmd.ExecuteNonQuery() > 0;
@@ -354,28 +391,21 @@ public class StorageManager
         {
             Console.WriteLine("Error processing return: " + ex.Message);
         }
+
         return false;
     }
 
     public bool AddStaff(string username, string password)
     {
-        if (!EnsureConnectionOpen()) return false;
+        if (UserExists(username))
+        {
+            Console.WriteLine("This username already exists.");
+            return false;
+        }
 
         try
         {
-            using (SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Username = @username", conn))
-            {
-                checkCommand.Parameters.AddWithValue("@username", username);
-                int userCount = Convert.ToInt32(checkCommand.ExecuteScalar());
-
-                if (userCount > 0)
-                {
-                    Console.WriteLine("This username already exists.");
-                    return false;
-                }
-            }
-
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Role) VALUES (@username, @password, 'Staff')", conn))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Role) VALUES (@username, @password, 'Staff')", _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", password);
@@ -386,6 +416,7 @@ public class StorageManager
         {
             Console.WriteLine("Error adding staff: " + ex.Message);
         }
+
         return false;
     }
 
@@ -397,7 +428,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("SELECT Username, Role FROM Users WHERE Role = 'Staff'", conn))
+            using (SqlCommand cmd = new SqlCommand("SELECT Username, Role FROM Users WHERE Role = 'Staff'", _conn))
             {
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -415,6 +446,7 @@ public class StorageManager
         {
             Console.WriteLine("Error viewing staff: " + ex.Message);
         }
+
         return staffFound;
     }
 
@@ -424,7 +456,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Password = @password WHERE Username = @username AND Role = 'Staff'", conn))
+            using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Password = @password WHERE Username = @username AND Role = 'Staff'", _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", newPassword);
@@ -435,6 +467,7 @@ public class StorageManager
         {
             Console.WriteLine("Error updating staff: " + ex.Message);
         }
+
         return false;
     }
 
@@ -444,7 +477,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("DELETE FROM Users WHERE Username = @username AND Role = 'Staff'", conn))
+            using (SqlCommand cmd = new SqlCommand("DELETE FROM Users WHERE Username = @username AND Role = 'Staff'", _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 return cmd.ExecuteNonQuery() > 0;
@@ -454,28 +487,21 @@ public class StorageManager
         {
             Console.WriteLine("Error deleting staff: " + ex.Message);
         }
+
         return false;
     }
 
     public bool AddMember(string username, string password)
     {
-        if (!EnsureConnectionOpen()) return false;
+        if (UserExists(username))
+        {
+            Console.WriteLine("This username already exists.");
+            return false;
+        }
 
         try
         {
-            using (SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Username = @username", conn))
-            {
-                checkCommand.Parameters.AddWithValue("@username", username);
-                int userCount = Convert.ToInt32(checkCommand.ExecuteScalar());
-
-                if (userCount > 0)
-                {
-                    Console.WriteLine("This username already exists.");
-                    return false;
-                }
-            }
-
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Role) VALUES (@username, @password, 'Member')", conn))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Role) VALUES (@username, @password, 'Member')", _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", password);
@@ -486,6 +512,7 @@ public class StorageManager
         {
             Console.WriteLine("Error adding member: " + ex.Message);
         }
+
         return false;
     }
 
@@ -495,7 +522,7 @@ public class StorageManager
 
         try
         {
-            using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Password = @password WHERE Username = @username AND Role = 'Member'", conn))
+            using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Password = @password WHERE Username = @username AND Role = 'Member'", _conn))
             {
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", newPassword);
@@ -506,15 +533,38 @@ public class StorageManager
         {
             Console.WriteLine("Error updating member: " + ex.Message);
         }
+
         return false;
     }
 
     public void CloseConnections()
     {
-        if (conn != null && conn.State == ConnectionState.Open)
+        Dispose();
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
         {
-            conn.Close();
-            Console.WriteLine("Database connection closed.");
+            if (disposing)
+            {
+                if (_conn != null)
+                {
+                    if (_conn.State == ConnectionState.Open)
+                    {
+                        _conn.Close();
+                    }
+                    _conn.Dispose();
+                    _conn = null;
+                }
+            }
+            _disposed = true;
         }
     }
 }
