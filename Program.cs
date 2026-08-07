@@ -11,6 +11,7 @@ namespace LibraryManagement
         private const int MinUsernameLength = 4;
         private const int MaxUsernameLength = 50;
         private const int MinPasswordLength = 6;
+        private const int MaxPasswordLength = 30;
         private const int MinimumValidId = 0;
 
         private static StorageManager storageManager = null!;
@@ -102,11 +103,15 @@ namespace LibraryManagement
             string password = myView.GetInput();
 
             // Password Validation Loop
-            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength || password.Length > MaxPasswordLength)
             {
                 if (string.IsNullOrWhiteSpace(password))
                 {
                     myView.DisplayMessage("Password cannot be empty.");
+                }
+                else if (password.Length > MaxPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must not exceed {MaxPasswordLength} characters.");
                 }
                 else
                 {
@@ -478,9 +483,20 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter member password:");
             string password = myView.GetInput();
 
-            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength || password.Length > MaxPasswordLength)
             {
-                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    myView.DisplayMessage("Password cannot be empty.");
+                }
+                else if (password.Length < MinPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                }
+                else if (password.Length > MaxPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must not exceed {MaxPasswordLength} characters.");
+                }
                 myView.DisplayMessage("Enter member password:");
                 password = myView.GetInput();
             }
@@ -669,9 +685,20 @@ namespace LibraryManagement
             myView.DisplayMessage("Enter staff password:");
             string password = myView.GetInput();
 
-            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength || password.Length > MaxPasswordLength)
             {
-                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    myView.DisplayMessage("Password cannot be empty.");
+                }
+                else if (password.Length < MinPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                }
+                else if (password.Length > MaxPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must not exceed {MaxPasswordLength} characters.");
+                }
                 myView.DisplayMessage("Enter staff password:");
                 password = myView.GetInput();
             }
@@ -744,9 +771,20 @@ namespace LibraryManagement
             string newPassword = myView.GetInput();
 
             // Added Validation Loop for UpdateStaff Password
-            while (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < MinPasswordLength)
+            while (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < MinPasswordLength || newPassword.Length > MaxPasswordLength)
             {
-                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                if (string.IsNullOrWhiteSpace(newPassword))
+                {
+                    myView.DisplayMessage("Password cannot be empty.");
+                }
+                else if (newPassword.Length < MinPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                }
+                else if (newPassword.Length > MaxPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must not exceed {MaxPasswordLength} characters.");
+                }
                 myView.DisplayMessage("Enter new password:");
                 newPassword = myView.GetInput();
             }
@@ -830,9 +868,20 @@ namespace LibraryManagement
             string password = myView.GetInput();
 
             // Added Validation Loop for Admin AddMember Password
-            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
+            while (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength || password.Length > MaxPasswordLength)
             {
-                myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    myView.DisplayMessage("Password cannot be empty.");
+                }
+                else if (password.Length < MinPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
+                }
+                else if (password.Length > MaxPasswordLength)
+                {
+                    myView.DisplayMessage($"Password must not exceed {MaxPasswordLength} characters.");
+                }
                 myView.DisplayMessage("Enter member password:");
                 password = myView.GetInput();
             }
@@ -903,7 +952,7 @@ namespace LibraryManagement
             string newPassword = myView.GetInput();
 
             // Added Validation Loop for Admin UpdateMember Password
-            while (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < MinPasswordLength)
+            while (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < MinPasswordLength || newPassword.Length > MaxPasswordLength)
             {
                 myView.DisplayMessage($"Password must be at least {MinPasswordLength} characters.");
                 myView.DisplayMessage("Enter new password:");
