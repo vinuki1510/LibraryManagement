@@ -69,7 +69,7 @@ namespace LibraryManagement
                         back = true;
                         break;
                     default:
-                        myView.DisplayMessage("Invalid choice. Please try again.");
+                        myView.DisplayMessage("Invalid choice. Please enter a choice between 1 and 4.");
                         break;
                 }
             }
@@ -318,7 +318,7 @@ namespace LibraryManagement
                         myView.DisplayMessage("Logging out...");
                         break;
                     default:
-                        myView.DisplayMessage("Invalid choice. Please try again.");
+                        myView.DisplayMessage("Invalid choice. Please enter a choice between 1 and 9.");
                         Console.ReadKey();
                         break;
                 }
@@ -648,7 +648,7 @@ namespace LibraryManagement
                         break;
 
                     default:
-                        myView.DisplayMessage("Invalid choice. Please try again.");
+                        myView.DisplayMessage("Invalid choice. Please enter a choice between 1 and 9.");
                         Console.ReadKey();
                         break;
                 }
