@@ -37,12 +37,12 @@ namespace LibraryManagement
                         LoginMenu();
                         break;
 
-                    case "3":
+                    case "2":
                         exit = true;
                         break;
 
                     default:
-                        myView.DisplayMessage("Invalid choice. Please try again.");
+                        myView.DisplayMessage("Invalid choice. Please enter 1 or 2.");
                         break;
                 }
             }
