@@ -8,6 +8,7 @@ namespace LibraryManagement.View
 { 
     public class ConsoleView
     {
+        // Displays the main menu and allows the user to choose whether to login or exit.
         public void DisplayMainMenu()
         {
             Console.WriteLine("========================================");
@@ -20,6 +21,7 @@ namespace LibraryManagement.View
             Console.Write("Please enter your choice: ");
         }
 
+        // Displays the login options for Members, Staff and Admins.
         public int LoginMenu()
         {
             Console.Clear();
@@ -35,6 +37,7 @@ namespace LibraryManagement.View
             return ReadIntFromConsole();
         }
 
+        // Displays the options available to a logged-in Member.
         public int MemberMenu()
         {
             Console.WriteLine("1. Search Books");
@@ -46,6 +49,7 @@ namespace LibraryManagement.View
             return ReadIntFromConsole();
         }
 
+        // Displays the options available to a logged-in Staff member.
         public int StaffMenu()
         {
             Console.WriteLine("1. Add Book");
@@ -62,6 +66,7 @@ namespace LibraryManagement.View
             return ReadIntFromConsole();
         }
 
+        // Displays the options available to a logged-in Admin.
         public int AdminMenu()
         {
             Console.WriteLine("1. Add Staff");
@@ -78,21 +83,25 @@ namespace LibraryManagement.View
             return ReadIntFromConsole();
         }
 
+        // Displays a message to the user.
         public void DisplayMessage(string message)
         {
             Console.WriteLine(message);
         }
 
+        // Gets text input from the user.
         public string GetInput()
         {
             return Console.ReadLine() ?? string.Empty;
         }
 
+        // Gets a valid integer input from the user.
         public int GetIntInput()
         {
             return ReadIntFromConsole();
         }
 
+        // Reads and validates an integer entered by the user.
         private int ReadIntFromConsole()
         {
             while (true)
