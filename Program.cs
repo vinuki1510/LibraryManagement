@@ -18,6 +18,7 @@ namespace LibraryManagement
         private static ConsoleView myView = null!;
         private static string loggedInUsername = string.Empty;
 
+        // Starts the library management system and displays the main menu.
         static void Main(string[] args)
         {
             string connectionString = "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=LibraryManagement;Integrated Security=True;Encrypt=False;TrustServerCertificate=True;";
@@ -48,6 +49,7 @@ namespace LibraryManagement
             }
         }
 
+        // Displays the login options and allows the user to choose their account role.
         private static void LoginMenu()
         {
             bool back = false;
@@ -75,6 +77,7 @@ namespace LibraryManagement
             }
         }
 
+        // Validates the user's login details and opens the menu for their selected role.
         private static void Login(string role)
         {
             myView.DisplayMessage("Enter username: ");
@@ -156,6 +159,7 @@ namespace LibraryManagement
             }
         }
 
+        // Displays the member menu and handles the options available to members.
         private static void MemberMenu()
         {
             bool logout = false;
@@ -199,6 +203,7 @@ namespace LibraryManagement
             }
         }
 
+        // Allows the member to search for a book by its title.
         private static void SearchBooks()
         {
             Console.Clear();
@@ -228,6 +233,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Allows the logged-in member to borrow an available book using its Book ID.
         private static void BorrowBook()
         {
             Console.Clear();
@@ -261,6 +267,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Displays the books currently borrowed or previously returned by the logged-in member.
         private static void ViewMyLoans()
         {
             Console.Clear();
@@ -278,6 +285,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Displays the staff menu and handles the options available to staff.
         private static void StaffMenu()
         {
             bool logout = false;
@@ -325,6 +333,7 @@ namespace LibraryManagement
             }
         }
 
+        // Adds a new book to the library database after validating the book title.
         private static void AddBook()
         {
             Console.Clear();
@@ -356,6 +365,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Displays all books currently stored in the library database.
         private static void ViewBooks()
         {
             Console.Clear();
@@ -376,6 +386,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Updates the title of an existing book using its Book ID.
         private static void UpdateBook()
         {
             Console.Clear();
@@ -423,6 +434,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Deletes a book from the library database using its Book ID.
         private static void DeleteBook()
         {
             Console.Clear();
@@ -454,6 +466,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Registers a new member by validating their username and password.
         private static void RegisterMember()
         {
             Console.Clear();
@@ -515,6 +528,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Displays all registered members in the library database.
         private static void ViewMembers()
         {
             Console.Clear();
@@ -535,6 +549,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Deletes a member account using the member's username.
         private static void DeleteMember()
         {
             Console.Clear();
@@ -570,6 +585,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Processes the return of a borrowed book using its Loan ID.
         private static void ProcessReturns()
         {
             Console.Clear();
@@ -600,6 +616,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Displays the admin menu and handles the options available to administrators.
         private static void AdminMenu()
         {
             bool logout = false;
@@ -655,6 +672,7 @@ namespace LibraryManagement
             }
         }
 
+        // Adds a new staff account after validating the username and password.
         private static void AddStaff()
         {
             Console.Clear();
@@ -720,6 +738,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Displays all staff accounts currently registered in the database.
         private static void ViewStaff()
         {
             Console.Clear();
@@ -739,6 +758,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Updates the password of an existing staff account.
         private static void UpdateStaff()
         {
             Console.Clear();
@@ -806,6 +826,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Deletes a staff account using the staff member's username.
         private static void DeleteStaff()
         {
             Console.Clear();
@@ -836,6 +857,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Adds a new member account after validating the username and password.
         private static void AddMember()
         {
             Console.Clear();
@@ -903,6 +925,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Displays the registered member accounts in the database.
         private static void ViewMember()
         {
             Console.Clear();
@@ -920,6 +943,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Updates the password of an existing member account.
         private static void UpdateMember()
         {
             Console.Clear();
@@ -976,6 +1000,7 @@ namespace LibraryManagement
             Console.ReadKey();
         }
 
+        // Deletes a member account using the member's username.
         private static void DeleteMembers()
         {
             Console.Clear();
