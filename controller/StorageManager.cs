@@ -10,19 +10,20 @@ public class StorageManager : IDisposable
     private readonly string _connectionString;
     private bool _disposed;
 
+    // Creates the StorageManager and starts the database connection.
     public StorageManager(string connectionString)
     {
         _connectionString = connectionString;
         InitializeConnection();
     }
 
+    // Opens a connection to the library database and handles connection errors.
     private void InitializeConnection()
     {
         try
         {
             _conn = new SqlConnection(_connectionString);
             _conn.Open();
-            Console.WriteLine("Connection Successful");
         }
         catch (InvalidOperationException)
         {
@@ -38,6 +39,10 @@ public class StorageManager : IDisposable
         }
     }
 
+    /// <summary>
+    /// Checks whether the database connection is open and attempts to reopen it if necessary.
+    /// </summary>
+    /// <returns></returns>
     private bool EnsureConnectionOpen()
     {
         if (_conn == null)
@@ -62,6 +67,7 @@ public class StorageManager : IDisposable
         return true;
     }
 
+    // Checks whether a username already exists in the Users table.
     private bool UserExists(string username)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -82,6 +88,7 @@ public class StorageManager : IDisposable
         }
     }
 
+    // Checks the username and password and returns the user's role if the login is successful.
     public string Login(string username, string password)
     {
         string role = string.Empty;
@@ -110,7 +117,8 @@ public class StorageManager : IDisposable
 
         return role;
     }
-
+     
+    // Searches the Books table for books whose titles match the user's search.
     public bool SearchBook(string title)
     {
         bool bookFound = false;
@@ -145,6 +153,7 @@ public class StorageManager : IDisposable
         return bookFound;
     }
 
+    // Checks whether a book is available and creates a new loan for the logged-in member.
     public bool BorrowBook(string username, int bookId)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -181,6 +190,7 @@ public class StorageManager : IDisposable
         }
     }
 
+    // Displays all current and returned loans belonging to the logged-in member.
     public bool ViewMyLoans(string username)
     {
         bool loansFound = false;
@@ -224,6 +234,7 @@ public class StorageManager : IDisposable
         return loansFound;
     }
 
+    // Adds a new book with the specified title to the Books table.
     public bool AddBook(string title)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -244,6 +255,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Retrieves and displays all books stored in the database.
     public bool ViewBooks()
     {
         bool booksFound = false;
@@ -274,6 +286,7 @@ public class StorageManager : IDisposable
         return booksFound;
     }
 
+    // Updates the title of an existing book using its Book ID.
     public bool UpdateBook(int bookId, string newTitle)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -295,6 +308,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Deletes a book from the Books table using its Book ID.
     public bool DeleteBook(int bookId)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -315,11 +329,13 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Registers a new member by calling the AddMember method.
     public bool RegisterMember(string username, string password)
     {
         return AddMember(username, password);
     }
 
+    // Retrieves and displays all users who have the Member role.
     public bool ViewMembers()
     {
         bool membersFound = false;
@@ -350,6 +366,7 @@ public class StorageManager : IDisposable
         return membersFound;
     }
 
+    // Calls ViewMembers to display the members in the database.
     public bool ViewMember()
     {
         return ViewMembers();
@@ -375,6 +392,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Marks an active loan as returned by adding the current date as the ReturnDate.
     public bool ProcessReturn(int loanId)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -395,6 +413,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Adds a new Staff user to the Users table after checking that the username is unique.
     public bool AddStaff(string username, string password)
     {
         if (UserExists(username))
@@ -420,6 +439,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Retrieves and displays all users who have the Staff role.
     public bool ViewStaff()
     {
         bool staffFound = false;
@@ -450,6 +470,7 @@ public class StorageManager : IDisposable
         return staffFound;
     }
 
+    // Updates the password of an existing Staff user.
     public bool UpdateStaff(string username, string newPassword)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -471,6 +492,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Deletes a Staff user from the Users table using their username.
     public bool DeleteStaff(string username)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -491,6 +513,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Adds a new Member user to the Users table after checking that the username is unique.
     public bool AddMember(string username, string password)
     {
         if (UserExists(username))
@@ -516,6 +539,7 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Updates the password of an existing Member user.
     public bool UpdateMember(string username, string newPassword)
     {
         if (!EnsureConnectionOpen()) return false;
@@ -537,17 +561,20 @@ public class StorageManager : IDisposable
         return false;
     }
 
+    // Closes and releases the database connection through Dispose.
     public void CloseConnections()
     {
         Dispose();
     }
 
+    // Releases the database connection and other resources used by the StorageManager.
     public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
     }
 
+    // Performs the actual cleanup of the database connection and prevents resources being disposed twice.
     protected virtual void Dispose(bool disposing)
     {
         if (!_disposed)
